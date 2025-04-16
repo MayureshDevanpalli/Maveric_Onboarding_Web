@@ -1,0 +1,99 @@
+import { Button } from "primereact/button";
+import React, { useState } from "react";
+import { Dialog } from "primereact/dialog";
+import { InputTextarea } from "primereact/inputtextarea";
+
+const ProfessionalSummary = ({ summary, summaryEmitter }) => {
+  const [visible, setVisible] = useState(false);
+  const [updatedSummary, setUpdatedSummary] = useState(summary);
+
+  const onSummaryChanges = (e) => {
+    setUpdatedSummary(e.target.value);
+  };
+
+  const handleSave = () => {
+    setVisible(false);
+    summaryEmitter(updatedSummary);
+  };
+
+  return (
+    <>
+      <div style={{ display: "flex" }}>
+        <div
+          style={{
+            backgroundColor: "white",
+            paddingBottom: "1rem",
+            paddingLeft: "5rem",
+            paddingRight: "5rem",
+            width: "85vw",
+            paddingTop: "1rem",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "lightGrey",
+              marginBottom: "1rem",
+              paddingLeft: "1rem",
+              paddingRight: "1rem",
+              fontWeight: "bold",
+            }}
+          >
+            Professional Summary
+          </div>
+          <div style={{ textAlign: "justify" }}>{summary}</div>
+        </div>
+        {/*<Button
+          label="Edit Summary"
+          outlined
+          style={{
+            marginTop: "1rem",
+            width: "165px",
+            height: "50px",
+            marginLeft: "2rem",
+            borderRadius: "5px",
+            borderColor: "#1a4879",
+            color: "#1a4879",
+          }}
+          onClick={() => setVisible(true)}
+        />*/}
+        <Dialog
+          header="Professional Summary"
+          visible={visible}
+          style={{ width: "50vw" }}
+          onHide={() => {
+            if (!visible) return;
+            setVisible(false);
+          }}
+        >
+          <div className="p-1 flex gap-3">
+            <InputTextarea
+              rows={10}
+              cols={180}
+              autoResize="false"
+              name="summary"
+              value={updatedSummary}
+              onChange={onSummaryChanges}
+              placeholder="professional Summary"
+              style={{ resize: "none", textAlign: "justify" }}
+            />
+          </div>
+          <div style={{ display: "flex" }}>
+            <Button
+              label="Save"
+              outlined
+              style={{
+                width: "122px",
+                borderRadius: "5px",
+                borderColor: "#c2257c",
+                color: "#c2257c",
+              }}
+              onClick={handleSave}
+            />
+          </div>
+        </Dialog>
+      </div>
+    </>
+  );
+};
+
+export default ProfessionalSummary;

@@ -1,0 +1,115 @@
+import { useState } from "react";
+import { Image } from "primereact/image";
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import { InputText } from "primereact/inputtext";
+
+const Header = ({ headers, headersEmitter }) => {
+  const [visible, setVisible] = useState(false);
+
+  // State to hold the updated headers
+  const [updatedHeaders, setUpdatedHeaders] = useState(headers);
+
+  // Function to handle changes in the input fields
+  const onHeadersChanges = (e) => {
+    const { name, value } = e.target;
+    setUpdatedHeaders((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Function to handle the save button click
+  const handleSave = () => {
+    setVisible(false);
+    headersEmitter(updatedHeaders);
+  };
+
+  return (
+    <>
+      <div style={{ display: "flex" }}>
+        <div
+          style={{
+            backgroundColor: "white",
+            padding: "1rem",
+            paddingLeft: "5rem",
+            paddingRight: "5rem",
+            width: "85vw",
+            paddingTop: "2rem",
+          }}
+        >
+          <div>
+            <Image
+              src="src/assets/Maveric_Systems_Logo.jpg"
+              alt="Image"
+              width="150"
+              className="col-md-5"
+              style={{ opacity: "0.7" }}
+            />
+          </div>
+          <br />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ opacity: "0.7", fontSize: "1rem" }}>
+              {headers.candidateName}
+            </div>
+            <div style={{ opacity: "0.7", fontSize: "1rem" }}>
+              {headers.candidatePosition}
+            </div>
+          </div>
+        </div>
+        {/*<Button
+          label="Edit Headers"
+          outlined
+          style={{
+            width: "165px",
+            height: "50px",
+            marginLeft: "2rem",
+            borderRadius: "5px",
+            borderColor: "#1a4879",
+            color: "#1a4879",
+          }}
+          onClick={() => setVisible(true)}
+        />*/}
+        <Dialog
+          header="Header"
+          visible={visible}
+          style={{ width: "30vw" }}
+          onHide={() => {
+            if (!visible) return;
+            setVisible(false);
+          }}
+        >
+          <div className="p-1 flex gap-3" style={{ marginBottom: "1rem" }}>
+            <InputText
+              name="candidateName"
+              value={updatedHeaders.candidateName}
+              onChange={onHeadersChanges}
+              placeholder="Candidate Name"
+            />
+            <InputText
+              name="candidatePosition"
+              value={updatedHeaders.candidatePosition}
+              onChange={onHeadersChanges}
+              placeholder="Candidate Position"
+            />
+          </div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              label="Save"
+              outlined
+              style={{
+                width: "122px",
+                borderRadius: "5px",
+                borderColor: "#c2257c",
+                color: "#c2257c",
+              }}
+              onClick={handleSave}
+            />
+          </div>{" "}
+        </Dialog>
+      </div>
+    </>
+  );
+};
+
+export default Header;
