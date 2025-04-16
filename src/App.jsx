@@ -15,7 +15,7 @@ import SkillsCard from "./components/SkillsCard";
 const containerStyle = {
   display: "flex",
   alignItems: "center",
-  gap: "1rem",
+  marginTop: "1rem",
 };
 
 // Styles
@@ -125,13 +125,14 @@ function App() {
     <>
       {loading && <FullPageSpinner />}
       <Toast ref={toast}></Toast>
-      <div style={{ marginBottom: "2rem" }}>
+      <div style={{ marginBottom: "1rem" }}>
         <nav style={containerStyle}>
           <Image
             src="src/assets/Maveric_Systems_Logo.jpg"
             alt="Image"
             width="250"
             className="col-md-5"
+            style={{ marginLeft: "2rem" }}
           />
           <div style={{ margin: 0, textAlign: "center", fontSize: "2rem" }}>
             <span style={{ color: "#1a4879" }}>Resume </span>
@@ -168,7 +169,7 @@ function App() {
                   <span style={{ marginRight: "1rem" }}>File Name:</span>
                   {file ? file.name : "No file selected"}
                   <br />
-                  <span style={{ marginRight: "1.5rem" }}>File Size:</span>{" "}
+                  <span style={{ marginRight: "1.5rem" }}>File Size:</span>
                   {file ? file.size / 1024 : 0} KB
                 </p>
               </div>
@@ -201,10 +202,15 @@ function App() {
             title="Skill Match Insights"
             style={{ backgroundColor: "#f1f1f1", color: "#1a4879" }}
           >
-            <SkillsCard
-              requiredSkills={requiredSkills}
-              candidateSkills={candidateSkills}
-            />
+            {file && (
+              <SkillsCard
+                requiredSkills={requiredSkills}
+                candidateSkills={candidateSkills}
+              />
+            )}
+            {!file && (
+              <div style={{ textAlign: "center" }}>no file selected</div>
+            )}
           </Card>
         </div>
         <div style={{ marginBottom: "1rem" }}>

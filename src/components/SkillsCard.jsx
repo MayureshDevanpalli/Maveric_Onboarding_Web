@@ -22,7 +22,7 @@ const SkillsCard = ({ requiredSkills, candidateSkills }) => {
       case percent <= 66:
         return "#f0a646";
       default:
-        return "#22c55e";
+        return "#4ade80";
     }
   };
 
