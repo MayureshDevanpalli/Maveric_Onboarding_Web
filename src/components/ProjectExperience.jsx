@@ -1,8 +1,10 @@
 import { Button } from "primereact/button";
 import { use, useState } from "react";
 import React, { forwardRef } from "react";
+import 'primeicons/primeicons.css';
 
 const ProjectExperience = forwardRef((props, ref) => {
+  const [hoveredItem, setHoveredItem] = useState(false);
   const [projectExperience, setProjectExperience] = useState([
     {
       client: "CustomerXPs Software Pvt Lmt",
@@ -137,7 +139,17 @@ const ProjectExperience = forwardRef((props, ref) => {
           >
             Project Experience
           </div>
-          <div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              width: '100%',
+            }}
+            onMouseEnter={() => setHoveredItem(true)}
+            onMouseLeave={() => setHoveredItem(false)}
+          >
+          <div style={{ width: '98%'}}>
             <table
               className="table table-bordered"
               style={{ borderColor: "black" }}
@@ -204,6 +216,21 @@ const ProjectExperience = forwardRef((props, ref) => {
                 ))}
               </tbody>
             </table>
+          </div>
+            <div style={{ width: '2%', display: 'flex', justifyContent: 'flex-end' }}>
+              {hoveredItem && (
+                <i
+                  className="pi pi-pencil"
+                  onClick={() => setVisible(true)}
+                  style={{
+                    fontSize: "1.1rem",
+                    color: "gray",
+                    cursor: "pointer",
+                    alignSelf: 'flex-start'
+                  }}
+                ></i>
+              )}
+            </div>
           </div>
         </div>
         {/*<Button
