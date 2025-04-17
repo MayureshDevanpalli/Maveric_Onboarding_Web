@@ -2,6 +2,7 @@ import { Button } from "primereact/button";
 import { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
+import 'primeicons/primeicons.css';
 
 const ProfessionalExperience = () => {
   const [visible, setVisible] = useState(false);
@@ -12,6 +13,7 @@ const ProfessionalExperience = () => {
     "Worked in Agile methodology at Deutsche Bank, developing PL/SQL packages, procedures, and functions for various backend programs.",
     "Performed Finacle 10x Core Customization Development, applet menu customization, and report development for UCO Bank, creating custom menus for data capturing and optimizing PL/SQL programs",
   ]);
+  const [hoveredItem, setHoveredItem] = useState(false);
 
   return (
     <>
@@ -37,12 +39,46 @@ const ProfessionalExperience = () => {
           >
             Professional Experience
           </div>
-          <div>
+          {/* <div>
             <ul>
               {professionalExperience.map((skill, index) => (
                 <li key={index}>{skill}</li>
               ))}
             </ul>
+          </div> */}
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              width: '100%',
+            }}
+            onMouseEnter={() => setHoveredItem(true)}
+            onMouseLeave={() => setHoveredItem(false)}
+          >
+            <div style={{ width: '98%', opacity: 0.8, fontSize: '1rem' }}>
+              <ul>
+                {professionalExperience.map((skill, index) => (
+                  <li key={index}>{skill}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div style={{ width: '2%', display: 'flex', justifyContent: 'flex-end' }}>
+              {hoveredItem && (
+                <i
+                  className="pi pi-pencil"
+                  onClick={() => setVisible(true)}
+                  style={{
+                    fontSize: "1.1rem",
+                    color: "gray",
+                    cursor: "pointer",
+                    alignSelf: 'flex-start'
+                  }}
+                ></i>
+              )}
+            </div>
           </div>
         </div>
         {/*<Button
