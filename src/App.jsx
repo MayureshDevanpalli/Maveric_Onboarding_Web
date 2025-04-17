@@ -12,14 +12,13 @@ import SkillsCard from "./components/SkillsCard";
 
 // severity?: 'success' | 'info' | 'warn' | 'error' | 'secondary' | 'contrast'
 
-const containerStyle = {
+const navStyle = {
   display: "flex",
   alignItems: "center",
   marginTop: "1rem",
 };
 
-// Styles
-const overlayStyle = {
+const progressSpinnerStyle = {
   position: "fixed",
   top: 0,
   left: 0,
@@ -63,7 +62,7 @@ function App() {
 
   const toast = useRef(null);
   const [file, setFile] = useState(null);
-  const [showUploadBtn, setShowUploadBtn] = useState(false);
+  const [isFileSelected, setIsFileSelected] = useState(false);
   const [loading, setLoading] = useState(false);
   const editorRef = useRef();
 
@@ -110,12 +109,30 @@ function App() {
 
     // set file name and size
     setFile(file);
-    setShowUploadBtn(true);
+    setIsFileSelected(true);
+
+    // Extract data from the file
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      setLoading(true);
+      const response = await fetch("http://localhost:8080/api/resume/parse", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+      setLoading(false);
+      console.log("Success:", result);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error:", error);
+    }
   };
 
   const FullPageSpinner = () => {
     return (
-      <div style={overlayStyle}>
+      <div style={progressSpinnerStyle}>
         <ProgressSpinner animationDuration="0.5s" />
       </div>
     );
@@ -126,7 +143,7 @@ function App() {
       {loading && <FullPageSpinner />}
       <Toast ref={toast}></Toast>
       <div style={{ marginBottom: "1rem" }}>
-        <nav style={containerStyle}>
+        <nav style={navStyle}>
           <Image
             src="src/assets/Maveric_Systems_Logo.jpg"
             alt="Image"
@@ -174,13 +191,13 @@ function App() {
                 </p>
               </div>
             </div>
-            {showUploadBtn && (
+            {isFileSelected && (
               <Button
                 label="Remove file"
                 outlined
                 onClick={() => {
                   setFile(null);
-                  setShowUploadBtn(false);
+                  setIsFileSelected(false);
                   toast.current.show({
                     severity: "warn",
                     summary: "Success",
