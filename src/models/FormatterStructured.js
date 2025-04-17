@@ -22,7 +22,7 @@ export const Credits = [
 ];
 
 export const SchemaStructured = {
-  header: Headers,
+  headers: Headers,
   professionalSummary: "",
   professionalExperience: [],
   awards: [],

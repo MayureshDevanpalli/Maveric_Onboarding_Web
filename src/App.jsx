@@ -64,6 +64,7 @@ function App() {
   const [file, setFile] = useState(null);
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [schemaStructured, setSchemaStructured] = useState(null);
   const editorRef = useRef();
 
   const handleSave = () => {
@@ -121,9 +122,22 @@ function App() {
         body: formData,
       });
 
-      const result = await response.json();
+      const data = await response.json();
+
+      const mappedSchema = {
+        headers: data.headers || {},
+        professionalSummary: data.professionalSummary || "",
+        professionalExperience: data.professionalExperience || [],
+        awards: data.awards || [],
+        certifications: data.certifications || [],
+        education: data.education || [],
+        credits: data.credits || [],
+        projectExperience: data.projectExperience || [],
+      };
+
+      setSchemaStructured(mappedSchema);
       setLoading(false);
-      console.log("Success:", result);
+      console.log("Success:", mappedSchema);
     } catch (error) {
       setLoading(false);
       console.error("Error:", error);
@@ -219,13 +233,13 @@ function App() {
             title="Skill Match Insights"
             style={{ backgroundColor: "#f1f1f1", color: "#1a4879" }}
           >
-            {file && (
+            {schemaStructured && (
               <SkillsCard
                 requiredSkills={requiredSkills}
                 candidateSkills={candidateSkills}
               />
             )}
-            {!file && (
+            {!schemaStructured && (
               <div style={{ textAlign: "center" }}>no file selected</div>
             )}
           </Card>
@@ -235,8 +249,8 @@ function App() {
             title="Preview Resume"
             style={{ backgroundColor: "#f1f1f1", color: "#1a4879" }}
           >
-            {file && <ResumeEditor />}
-            {!file && (
+            {schemaStructured && <ResumeEditor data={schemaStructured} />}
+            {!schemaStructured && (
               <div style={{ textAlign: "center" }}>no file selected</div>
             )}
           </Card>

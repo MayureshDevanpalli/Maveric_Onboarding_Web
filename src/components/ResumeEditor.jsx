@@ -11,10 +11,8 @@ import EducationAndQualifications from "./EducationAndQualifications";
 import Credits from "./Credits";
 import ProjectExperience from "./ProjectExperience";
 
-const ResumeEditor = () => {
-  const [schemaStructured, setSchemaStructured] = useState(
-    data.schemaStructured
-  );
+const ResumeEditor = ({ data }) => {
+  const [schemaStructured, setSchemaStructured] = useState(data);
   const sectionRef = useRef();
 
   const handleExport = async () => {
@@ -48,6 +46,8 @@ const ResumeEditor = () => {
       professionalSummary: updatedSummary, // Only update the 'user' key
     }));
   };
+
+  console.log("schemaStructured", schemaStructured);
 
   return (
     <div
