@@ -3,9 +3,12 @@ import { Image } from "primereact/image";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
+import 'primeicons/primeicons.css';
+
 
 const Header = ({ headers, headersEmitter }) => {
   const [visible, setVisible] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState("");
 
   // State to hold the updated headers
   const [updatedHeaders, setUpdatedHeaders] = useState(headers);
@@ -36,8 +39,7 @@ const Header = ({ headers, headersEmitter }) => {
             paddingRight: "5rem",
             width: "85vw",
             paddingTop: "2rem",
-          }}
-        >
+          }}>
           <div>
             <Image
               src="src/assets/Maveric_Systems_Logo.jpg"
@@ -48,12 +50,34 @@ const Header = ({ headers, headersEmitter }) => {
             />
           </div>
           <br />
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={{ opacity: "0.7", fontSize: "1rem" }}>
-              {headers.candidateName}
+          <div style={{ width: '100%', display: "flex", justifyContent: "space-between" }}
+            onMouseEnter={() => setHoveredItem(true)}
+            onMouseLeave={() => setHoveredItem(null)}>
+              
+            <div style={{
+              width: '98%',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'}}>
+              <div style={{ opacity: "0.7", fontSize: "1rem"}}>
+                {headers.candidateName}
+              </div>
+              <div style={{ opacity: "0.7", fontSize: "1rem", justifySelf: 'end', paddingRight: 16 }}>
+                {headers.candidatePosition}
+              </div>
             </div>
-            <div style={{ opacity: "0.7", fontSize: "1rem" }}>
-              {headers.candidatePosition}
+            <div style={{ width: '2%', display: 'flex', justifyContent: 'flex-end'}}>
+              {hoveredItem && (
+                <i
+                  className="pi pi-pencil"
+                  onClick={() => setVisible(true)}
+                  style={{
+                    fontSize: "1.1rem",
+                    color: "gray",
+                    cursor: "pointer",
+                  }}>
+                </i>
+              )}
             </div>
           </div>
         </div>
