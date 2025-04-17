@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { Button } from "primereact/button";
-import 'primeicons/primeicons.css';
+import "primeicons/primeicons.css";
 
-const EducationAndQualifications = () => {
-  const [education, setEducation] = useState([
-    "2014: B.Tech | LPU, Punjab",
-    "2019: PGDM | MIT, Pune",
-  ]);
+const EducationAndQualifications = ({ eduList }) => {
+  const [education, setEducation] = useState(eduList);
   const [hoveredItem, setHoveredItem] = useState(false);
-
 
   return (
     <>
@@ -44,15 +40,15 @@ const EducationAndQualifications = () => {
 
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              width: '100%',
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-start",
+              width: "100%",
             }}
             onMouseEnter={() => setHoveredItem(true)}
             onMouseLeave={() => setHoveredItem(false)}
           >
-            <div style={{ width: '98%', opacity: 0.8, fontSize: '1rem' }}>
+            <div style={{ width: "98%", opacity: 0.8, fontSize: "1rem" }}>
               <ul>
                 {education.map((skill, index) => (
                   <li key={index}>{skill}</li>
@@ -60,7 +56,13 @@ const EducationAndQualifications = () => {
               </ul>
             </div>
 
-            <div style={{ width: '2%', display: 'flex', justifyContent: 'flex-end' }}>
+            <div
+              style={{
+                width: "2%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
@@ -69,13 +71,12 @@ const EducationAndQualifications = () => {
                     fontSize: "1.1rem",
                     color: "gray",
                     cursor: "pointer",
-                    alignSelf: 'flex-start'
+                    alignSelf: "flex-start",
                   }}
                 ></i>
               )}
             </div>
           </div>
-
         </div>
         {/*<Button
           label="Edit Education"

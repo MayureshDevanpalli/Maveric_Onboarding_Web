@@ -47,8 +47,6 @@ const ResumeEditor = ({ data }) => {
     }));
   };
 
-  console.log("schemaStructured", schemaStructured);
-
   return (
     <div
       style={{
@@ -67,11 +65,19 @@ const ResumeEditor = ({ data }) => {
         summary={schemaStructured.professionalSummary}
         summaryEmitter={onSummaryChanges}
       ></ProfessionalSummary>
-      <ProfessionalExperience></ProfessionalExperience>
-      <CertificationsAndCourses></CertificationsAndCourses>
-      <EducationAndQualifications></EducationAndQualifications>
-      <Credits></Credits>
-      <ProjectExperience></ProjectExperience>
+      <ProfessionalExperience
+        experience={schemaStructured.professionalExperience}
+      ></ProfessionalExperience>
+      <CertificationsAndCourses
+        certs={schemaStructured.certifications}
+      ></CertificationsAndCourses>
+      <EducationAndQualifications
+        eduList={schemaStructured.education}
+      ></EducationAndQualifications>
+      <Credits creditMap={schemaStructured.credits}></Credits>
+      <ProjectExperience
+        experience={schemaStructured.projectExperience}
+      ></ProjectExperience>
       <Button
         onClick={handleExport}
         label="Download Resume"

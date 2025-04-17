@@ -2,19 +2,13 @@ import { Button } from "primereact/button";
 import { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
-import 'primeicons/primeicons.css';
+import "primeicons/primeicons.css";
 
-const ProfessionalExperience = () => {
+const ProfessionalExperience = ({ experience }) => {
   const [visible, setVisible] = useState(false);
-  const [professionalExperience, setProfessionalExperience] = useState([
-    "Developed and implemented a pricing module in Finacle Core for Standard Bank, Tanzania, decommissioning their legacy TBMS application for charge collection.",
-    "Integrated Finacle with Clari5 (fraud and anti-money laundering application) at CustomerXPs Software, preventing and monitoring fraudulent transactions.",
-    "Customized CRM for BankOne Bank, Mauritius, handling requirement analysis, solution development, and client interaction.",
-    "Worked in Agile methodology at Deutsche Bank, developing PL/SQL packages, procedures, and functions for various backend programs.",
-    "Performed Finacle 10x Core Customization Development, applet menu customization, and report development for UCO Bank, creating custom menus for data capturing and optimizing PL/SQL programs",
-  ]);
+  const [professionalExperience, setProfessionalExperience] =
+    useState(experience);
   const [hoveredItem, setHoveredItem] = useState(false);
-
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -39,25 +33,17 @@ const ProfessionalExperience = () => {
           >
             Professional Experience
           </div>
-          {/* <div>
-            <ul>
-              {professionalExperience.map((skill, index) => (
-                <li key={index}>{skill}</li>
-              ))}
-            </ul>
-          </div> */}
-
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              width: '100%',
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-start",
+              width: "100%",
             }}
             onMouseEnter={() => setHoveredItem(true)}
             onMouseLeave={() => setHoveredItem(false)}
           >
-            <div style={{ width: '98%', opacity: 0.8, fontSize: '1rem' }}>
+            <div style={{ width: "98%", opacity: 0.8, fontSize: "1rem" }}>
               <ul>
                 {professionalExperience.map((skill, index) => (
                   <li key={index}>{skill}</li>
@@ -65,7 +51,13 @@ const ProfessionalExperience = () => {
               </ul>
             </div>
 
-            <div style={{ width: '2%', display: 'flex', justifyContent: 'flex-end' }}>
+            <div
+              style={{
+                width: "2%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
@@ -74,7 +66,7 @@ const ProfessionalExperience = () => {
                     fontSize: "1.1rem",
                     color: "gray",
                     cursor: "pointer",
-                    alignSelf: 'flex-start'
+                    alignSelf: "flex-start",
                   }}
                 ></i>
               )}

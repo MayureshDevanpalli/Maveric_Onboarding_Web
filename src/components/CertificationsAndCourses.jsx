@@ -1,21 +1,10 @@
 import { useState } from "react";
 import { Button } from "primereact/button";
-import 'primeicons/primeicons.css';
+import "primeicons/primeicons.css";
 
-const CertificationsAndCourses = () => {
-  const [certificates, setCertificates] = useState([
-    "PSPO Advanced",
-    "PSM",
-    "Google Agile Project Manager",
-    "Infosys Agile Practitioner",
-    "Tricentis Tosca Automation",
-    "Tricentis RPA",
-    "SAP",
-    "Salesforce",
-    "Azure Cloud",
-  ]);
+const CertificationsAndCourses = ({ certs }) => {
+  const [certificates, setCertificates] = useState(certs);
   const [hoveredItem, setHoveredItem] = useState(false);
-
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -42,15 +31,15 @@ const CertificationsAndCourses = () => {
           </div>
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              width: '100%',
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-start",
+              width: "100%",
             }}
             onMouseEnter={() => setHoveredItem(true)}
             onMouseLeave={() => setHoveredItem(false)}
           >
-            <div style={{ width: '98%', opacity: 0.8, fontSize: '1rem' }}>
+            <div style={{ width: "98%", opacity: 0.8, fontSize: "1rem" }}>
               <ul>
                 {certificates.map((skill, index) => (
                   <li key={index}>{skill}</li>
@@ -58,7 +47,13 @@ const CertificationsAndCourses = () => {
               </ul>
             </div>
 
-            <div style={{ width: '2%', display: 'flex', justifyContent: 'flex-end' }}>
+            <div
+              style={{
+                width: "2%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
@@ -67,7 +62,7 @@ const CertificationsAndCourses = () => {
                     fontSize: "1.1rem",
                     color: "gray",
                     cursor: "pointer",
-                    alignSelf: 'flex-start'
+                    alignSelf: "flex-start",
                   }}
                 ></i>
               )}

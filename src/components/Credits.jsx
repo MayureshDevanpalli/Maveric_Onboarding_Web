@@ -1,41 +1,10 @@
 import { useState } from "react";
 import { Button } from "primereact/button";
-import 'primeicons/primeicons.css';
+import "primeicons/primeicons.css";
 
-const Credits = () => {
+const Credits = ({ creditMap }) => {
   const [hoveredItem, setHoveredItem] = useState(false);
-  const [credits, setCredits] = useState([
-    {
-      category: "Primary Skills",
-      items: [
-        "Finacle 10x Customization (Finacle scripting and ONS Services)",
-        "Jasper Reports",
-        "Unix, Shell Script",
-        "Oracle SQL,PL/SQL",
-        "Java, JavaScript, HTML, CSS",
-      ],
-    },
-    {
-      category: "Secondary skills",
-      items: [
-        "Finacle architecture",
-        "Finacle services",
-        "Finacle Core and CRM customization",
-        "Connect 24",
-        "FI",
-        "Payments",
-        "Tools: SQL Developer, DBvear,Putty,Eclipse, Intellij, VS Code, Git, Bitbucket, Jira, Confluence, SVN, RocketLane",
-      ],
-    },
-    {
-      category: "SOFT SKILLS",
-      items: [
-        "Leadership Qualities",
-        "Good listening, presentation and communication skill",
-        "Honest towards the task undertaken",
-      ],
-    },
-  ]);
+  const [credits, setCredits] = useState(creditMap);
 
   return (
     <>
@@ -61,47 +30,53 @@ const Credits = () => {
           >
             Credits
           </div>
-          
+
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              width: '100%',
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-start",
+              width: "100%",
             }}
             onMouseEnter={() => setHoveredItem(true)}
             onMouseLeave={() => setHoveredItem(false)}
           >
-          <div style={{ width: '98%'}}>
-            <table
-              className="table table-bordered"
-              style={{ borderColor: "black" }}
-            >
-              <tbody>
-                {credits.map((credit, index) => (
-                  <tr key={index}>
-                    <td
-                      scope="row"
-                      style={{ backgroundColor: "lightGrey" }}
-                      width="30%"
-                    >
-                      <div>
+            <div style={{ width: "98%" }}>
+              <table
+                className="table table-bordered"
+                style={{ borderColor: "black" }}
+              >
+                <tbody>
+                  {credits.map((credit, index) => (
+                    <tr key={index}>
+                      <td
+                        scope="row"
+                        style={{ backgroundColor: "lightGrey" }}
+                        width="30%"
+                      >
                         <div>
-                          <span style={{ fontWeight: "bold" }}>
-                            {credit.category}:
-                          </span>{" "}
+                          <div>
+                            <span style={{ fontWeight: "bold" }}>
+                              {credit.category}:
+                            </span>{" "}
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>{credit.items.join(", ")}</div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div style={{ width: '2%', display: 'flex', justifyContent: 'flex-end' }}>
+                      </td>
+                      <td>
+                        <div>{credit.items?.join(", ")}</div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div
+              style={{
+                width: "2%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
@@ -110,13 +85,12 @@ const Credits = () => {
                     fontSize: "1.1rem",
                     color: "gray",
                     cursor: "pointer",
-                    alignSelf: 'flex-start'
+                    alignSelf: "flex-start",
                   }}
                 ></i>
               )}
             </div>
-            </div>
-
+          </div>
         </div>
         {/*<Button
           label="Edit Credits"
