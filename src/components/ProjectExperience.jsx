@@ -101,7 +101,7 @@ const ProjectExperience = ({ experience }) => {
                             Responsibilities:{" "}
                           </div>
                           <ul>
-                            {exp.responsibilities.map((skill, index) => (
+                            {exp.responsibilities?.map((skill, index) => (
                               <li key={index}>{skill}</li>
                             ))}
                           </ul>

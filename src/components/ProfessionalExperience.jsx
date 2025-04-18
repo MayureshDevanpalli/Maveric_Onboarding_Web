@@ -4,11 +4,17 @@ import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import "primeicons/primeicons.css";
 
-const ProfessionalExperience = ({ experience }) => {
+const ProfessionalExperience = ({ experience, experienceEmitter }) => {
   const [visible, setVisible] = useState(false);
   const [professionalExperience, setProfessionalExperience] =
     useState(experience);
   const [hoveredItem, setHoveredItem] = useState(false);
+
+  const handleSave = () => {
+    setVisible(false);
+    experienceEmitter(professionalExperience);
+  };
+
   return (
     <>
       <div style={{ display: "flex" }}>

@@ -62,7 +62,6 @@ function App() {
 
   const toast = useRef(null);
   const [file, setFile] = useState(null);
-  const [isFileSelected, setIsFileSelected] = useState(false);
   const [loading, setLoading] = useState(false);
   const [schemaStructured, setSchemaStructured] = useState(null);
   const editorRef = useRef();
@@ -110,7 +109,7 @@ function App() {
 
     // set file name and size
     setFile(file);
-    setIsFileSelected(true);
+    setSchemaStructured(null);
 
     // Extract data from the file
     const formData = new FormData();
@@ -205,13 +204,13 @@ function App() {
                 </p>
               </div>
             </div>
-            {isFileSelected && (
+            {schemaStructured && (
               <Button
                 label="Remove file"
                 outlined
                 onClick={() => {
                   setFile(null);
-                  setIsFileSelected(false);
+                  setSchemaStructured(null);
                   toast.current.show({
                     severity: "warn",
                     summary: "Success",

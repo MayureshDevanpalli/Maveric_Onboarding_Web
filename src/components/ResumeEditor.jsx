@@ -1,6 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Button } from "primereact/button";
-import data from "../data/resumeData.json";
 import { saveAs } from "file-saver";
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import Header from "./Header";
@@ -13,17 +12,14 @@ import ProjectExperience from "./ProjectExperience";
 
 const ResumeEditor = ({ data }) => {
   const [schemaStructured, setSchemaStructured] = useState(data);
-  const sectionRef = useRef();
 
   const handleExport = async () => {
-    const text = sectionRef.current?.innerText;
-
     const doc = new Document({
       sections: [
         {
           children: [
             new Paragraph({
-              children: [new TextRun(text)],
+              children: [new TextRun("text here")],
             }),
           ],
         },
@@ -36,14 +32,21 @@ const ResumeEditor = ({ data }) => {
   const onHeaderChanges = (updatedHeaders) => {
     setSchemaStructured((prevData) => ({
       ...prevData,
-      headers: updatedHeaders, // Only update the 'user' key
+      headers: updatedHeaders,
     }));
   };
 
   const onSummaryChanges = (updatedSummary) => {
     setSchemaStructured((prevData) => ({
       ...prevData,
-      professionalSummary: updatedSummary, // Only update the 'user' key
+      professionalSummary: updatedSummary,
+    }));
+  };
+
+  const onExperienceChanges = (updatedExperience) => {
+    setSchemaStructured((prevData) => ({
+      ...prevData,
+      professionalExperience: updatedExperience,
     }));
   };
 
@@ -67,6 +70,7 @@ const ResumeEditor = ({ data }) => {
       ></ProfessionalSummary>
       <ProfessionalExperience
         experience={schemaStructured.professionalExperience}
+        experienceEmitter={onExperienceChanges}
       ></ProfessionalExperience>
       <CertificationsAndCourses
         certs={schemaStructured.certifications}

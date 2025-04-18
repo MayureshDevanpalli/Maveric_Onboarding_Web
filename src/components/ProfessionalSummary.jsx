@@ -2,11 +2,11 @@ import { Button } from "primereact/button";
 import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
-import 'primeicons/primeicons.css';
+import "primeicons/primeicons.css";
 
 const ProfessionalSummary = ({ summary, summaryEmitter }) => {
   const [visible, setVisible] = useState(false);
-  const [updatedSummary, setUpdatedSummary] = useState(summary);
+  const [professionalSummary, setUpdatedSummary] = useState(summary);
   const [hoveredItem, setHoveredItem] = useState(false);
 
   const onSummaryChanges = (e) => {
@@ -15,7 +15,7 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
 
   const handleSave = () => {
     setVisible(false);
-    summaryEmitter(updatedSummary);
+    summaryEmitter(professionalSummary);
   };
 
   return (
@@ -46,16 +46,24 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
 
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              width: '100%',
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-start",
+              width: "100%",
             }}
             onMouseEnter={() => setHoveredItem(true)}
             onMouseLeave={() => setHoveredItem(false)}
           >
-            <div style={{ width: '98%', opacity: 0.8, fontSize: '1rem' }}>{summary}</div>
-            <div style={{ width: '2%', display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ width: "98%", opacity: 0.8, fontSize: "1rem" }}>
+              {summary}
+            </div>
+            <div
+              style={{
+                width: "2%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
@@ -64,7 +72,7 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
                     fontSize: "1.1rem",
                     color: "gray",
                     cursor: "pointer",
-                    alignSelf: 'flex-start'
+                    alignSelf: "flex-start",
                   }}
                 ></i>
               )}
@@ -100,7 +108,7 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
               cols={180}
               autoResize="false"
               name="summary"
-              value={updatedSummary}
+              value={professionalSummary}
               onChange={onSummaryChanges}
               placeholder="professional Summary"
               style={{ resize: "none", textAlign: "justify" }}
