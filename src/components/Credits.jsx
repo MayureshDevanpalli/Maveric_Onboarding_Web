@@ -57,8 +57,8 @@ const Credits = ({ creditMap }) => {
                         <div>
                           <div>
                             <span style={{ fontWeight: "bold" }}>
-                              {credit.category}:
-                            </span>{" "}
+                              {credit.category}
+                            </span>
                           </div>
                         </div>
                       </td>
