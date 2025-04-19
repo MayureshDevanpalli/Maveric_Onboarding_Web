@@ -98,7 +98,7 @@ const ProjectExperience = ({ experience }) => {
                             {exp.description}
                           </div>
                           <div style={{ fontWeight: "bold" }}>
-                            Responsibilities:{" "}
+                            Responsibilities:
                           </div>
                           <ul>
                             {exp.responsibilities?.map((skill, index) => (
@@ -122,7 +122,6 @@ const ProjectExperience = ({ experience }) => {
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
-                  onClick={() => setVisible(true)}
                   style={{
                     fontSize: "1.1rem",
                     color: "gray",

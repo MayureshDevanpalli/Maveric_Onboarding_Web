@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Button } from "primereact/button";
-import { saveAs } from "file-saver";
-import { Document, Packer, Paragraph, TextRun } from "docx";
 import Header from "./Header";
 import ProfessionalSummary from "./ProfessionalSummary";
 import ProfessionalExperience from "./ProfessionalExperience";
@@ -13,7 +11,7 @@ import ProjectExperience from "./ProjectExperience";
 const ResumeEditor = ({ data }) => {
   const [schemaStructured, setSchemaStructured] = useState(data);
 
-  const handleExport = () => {
+  const downloadResume = () => {
     fetch("http://localhost:8080/api/resume/download-resume", {
       method: "POST",
       headers: {
@@ -21,12 +19,16 @@ const ResumeEditor = ({ data }) => {
       },
       body: JSON.stringify(schemaStructured),
     })
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(new Blob([blob]));
+      .then((response) => {
+        const fileName =
+          response.headers.get("X-Filename") || "downloaded-file.docx";
+        return response.blob().then((blob) => ({ blob, fileName }));
+      })
+      .then(({ blob, fileName }) => {
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "example.docx");
+        link.setAttribute("download", fileName);
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -87,7 +89,7 @@ const ResumeEditor = ({ data }) => {
         experience={schemaStructured.projectExperience}
       ></ProjectExperience>
       <Button
-        onClick={handleExport}
+        onClick={downloadResume}
         label="Download Resume"
         outlined
         style={{
