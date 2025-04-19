@@ -102,9 +102,9 @@ function App() {
 
     // If valid, proceed with logic
     toast.current.show({
-      severity: "info",
+      severity: "success",
       summary: "Success",
-      detail: file.name + " added successfully",
+      detail: "Extract data from file " + file.name,
     });
 
     // set file name and size
