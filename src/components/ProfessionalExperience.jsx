@@ -1,18 +1,57 @@
 import { Button } from "primereact/button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import "primeicons/primeicons.css";
+import { Checkbox } from "primereact/checkbox";
 
 const ProfessionalExperience = ({ experience, experienceEmitter }) => {
   const [visible, setVisible] = useState(false);
   const [professionalExperience, setProfessionalExperience] =
     useState(experience);
+  const [selectedExperiences, setSelectedExperiences] = useState([]);
   const [hoveredItem, setHoveredItem] = useState(false);
+  const experienceListRef = useRef(null);
 
   const handleSave = () => {
     setVisible(false);
     experienceEmitter(professionalExperience);
+  };
+
+  const onExperienceChanges = (e) => {
+    const index = parseInt(e.target.name, 10);
+    const updatedExperience = [...professionalExperience];
+    updatedExperience[index] = e.target.value;
+    setProfessionalExperience(updatedExperience);
+  };
+
+  const handleReset = () => {
+    setProfessionalExperience(experience);
+  };
+
+  const handleAddExperience = () => {
+    setProfessionalExperience([...professionalExperience, ""]);
+    setTimeout(() => {
+      if (experienceListRef.current) {
+        experienceListRef.current.scrollTop =
+          experienceListRef.current.scrollHeight;
+      }
+    }, 0);
+  };
+
+  const toggleCheckbox = (index) => {
+    const updatedSelections = [...selectedExperiences];
+    updatedSelections[index] = !updatedSelections[index];
+    setSelectedExperiences(updatedSelections);
+  };
+
+  const handleDeleteSelected = () => {
+    const newExperiences = professionalExperience.filter(
+      (_, index) => !selectedExperiences[index]
+    );
+    const newSelections = selectedExperiences.filter((selected) => !selected);
+    setProfessionalExperience(newExperiences);
+    setSelectedExperiences(newSelections);
   };
 
   return (
@@ -79,40 +118,118 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
             </div>
           </div>
         </div>
-        {/*<Button
-          label="Edit Experience"
-          outlined
-          style={{
-            marginTop: "1rem",
-            width: "165px",
-            height: "50px",
-            marginLeft: "2rem",
-            borderRadius: "5px",
-            borderColor: "#1a4879",
-            color: "#1a4879",
-          }}
-          onClick={() => setVisible(true)}
-        />*/}
         <Dialog
           header="Professional Experience"
           visible={visible}
-          style={{ width: "50vw" }}
+          style={{ width: "60vw", height: "80vh" }}
           onHide={() => {
             if (!visible) return;
+            handleReset();
             setVisible(false);
           }}
         >
-          <div className="p-1">
-            {professionalExperience.map((skill, index) => (
-              <InputTextarea
-                key={index}
-                rows={2}
-                cols={77}
-                autoResize="false"
-                value={skill}
-                style={{ resize: "none" }}
-              />
-            ))}
+          <div
+            style={{
+              padding: "1rem",
+              paddingTop: "0",
+              marginTop: "1rem",
+            }}
+          >
+            <div
+              style={{
+                maxHeight: "550px",
+                overflowY: "auto",
+                marginBottom: "1rem",
+              }}
+              ref={experienceListRef}
+            >
+              {professionalExperience.map((skill, index) => (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: "0.5rem",
+                  }}
+                  key={index}
+                >
+                  <Checkbox
+                    style={{ marginRight: "1rem" }}
+                    checked={selectedExperiences[index] || false}
+                    onChange={() => toggleCheckbox(index)}
+                  ></Checkbox>
+                  <InputTextarea
+                    key={index}
+                    rows={2}
+                    cols={107}
+                    name={index}
+                    autoResize="false"
+                    value={skill}
+                    onChange={onExperienceChanges}
+                    style={{ resize: "none" }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div
+              style={{
+                marginTop: "1rem",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <div>
+                <Button
+                  label="Save"
+                  outlined
+                  style={{
+                    width: "122px",
+                    borderRadius: "5px",
+                    borderColor: "#c2257c",
+                    color: "#c2257c",
+                    marginRight: "1rem",
+                  }}
+                  onClick={handleSave}
+                />
+                <Button
+                  label="Reset"
+                  outlined
+                  style={{
+                    width: "122px",
+                    borderRadius: "5px",
+                    borderColor: "#1a4879",
+                    color: "#1a4879",
+                    marginRight: "1rem",
+                  }}
+                  onClick={handleReset}
+                />
+              </div>
+              <div>
+                <Button
+                  label="Add Experience"
+                  outlined
+                  style={{
+                    width: "200px",
+                    borderRadius: "5px",
+                    borderColor: "#4ade80",
+                    background: "#4ade80",
+                    color: "white",
+                    marginRight: "1rem",
+                  }}
+                  onClick={handleAddExperience}
+                />
+                <Button
+                  label="Delete Selected"
+                  style={{
+                    width: "180px",
+                    borderRadius: "5px",
+                    borderColor: "#f55442",
+                    background: "#f55442",
+                    color: "white",
+                  }}
+                  onClick={handleDeleteSelected}
+                />
+              </div>
+            </div>
           </div>
         </Dialog>
       </div>

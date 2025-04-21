@@ -46,8 +46,6 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
           >
             Professional Summary
           </div>
-          {/* <div style={{ textAlign: "justify" }}>{summary}</div> */}
-
           <div
             style={{
               display: "flex",

@@ -179,6 +179,10 @@ function App() {
                 chooseLabel="Browse"
                 style={{
                   marginRight: "2rem",
+                  backgroundColor: "#f1f1f1",
+                  borderRadius: "5px",
+                  borderColor: "#1a4879",
+                  color: "red",
                 }}
               />
               <div>

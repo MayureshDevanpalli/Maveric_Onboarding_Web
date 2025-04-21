@@ -133,19 +133,6 @@ const ProjectExperience = ({ experience }) => {
             </div>
           </div>
         </div>
-        {/*<Button
-          label="Edit Experience"
-          outlined
-          style={{
-            marginTop: "1rem",
-            width: "165px",
-            height: "50px",
-            marginLeft: "2rem",
-            borderRadius: "5px",
-            borderColor: "#1a4879",
-            color: "#1a4879",
-          }}
-        />*/}
       </div>
     </>
   );
