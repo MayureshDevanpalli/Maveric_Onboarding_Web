@@ -19,38 +19,12 @@ const navStyle = {
 };
 
 function App() {
-  const requiredSkills = [
-    "JavaScript",
-    "React",
-    "AWS",
-    "Docker",
-    "GoLang",
-    "Java",
-    "Python",
-    "NodeJS",
-    "C++",
-    "HTML",
-    "CSS",
-    "angular",
-  ];
-  const candidateSkills = [
-    "React",
-    "AWS",
-    "Docker",
-    "GoLang",
-    "Java",
-    "Python",
-    "NodeJS",
-    "C++",
-    "HTML",
-    "CSS",
-    "angular",
-  ];
-
   const toast = useRef(null);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [schemaStructured, setSchemaStructured] = useState(null);
+  const [requiredSkills, setRequiredSkills] = useState([]);
+  const [matchedSills, setMatchedSills] = useState([]);
   const editorRef = useRef();
 
   const handleSave = () => {
@@ -123,7 +97,7 @@ function App() {
 
       setSchemaStructured(mappedSchema);
       setLoading(false);
-      console.log("Success:", mappedSchema);
+      matchSkills();
     } catch (error) {
       setLoading(false);
       console.error("Error:", error);
@@ -136,6 +110,27 @@ function App() {
       summary: "Success",
       detail: "Refresh insights coming soon",
     });
+  };
+
+  const matchSkills = async () => {
+    const a = {};
+    setLoading(true);
+    await fetch("http://localhost:8080/api/resume/match-skills", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(a),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setLoading(false);
+        const requiredSkills = data.requiredSills;
+        const matchedSkills = data.matchedSills;
+        setRequiredSkills(requiredSkills || []);
+        setMatchedSills(matchedSkills || []);
+      })
+      .catch((error) => console.error("Error:", error));
   };
 
   return (
@@ -243,10 +238,10 @@ function App() {
               >
                 <SkillsCard
                   requiredSkills={requiredSkills}
-                  candidateSkills={candidateSkills}
+                  matchedSkills={matchedSills}
                 />
                 <Button
-                  onClick={refreshInsights}
+                  onClick={matchSkills}
                   label="Refresh Insights"
                   outlined
                   style={{

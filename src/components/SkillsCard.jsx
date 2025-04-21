@@ -1,19 +1,16 @@
+import React from "react";
 import { Tag } from "primereact/tag";
 import { Knob } from "primereact/knob";
 import { Divider } from "primereact/divider";
-import { Button } from "primereact/button";
 
-const SkillsCard = ({ requiredSkills, candidateSkills }) => {
-  const matchedSkills = requiredSkills.filter((skill) =>
-    candidateSkills.includes(skill)
-  );
-
+const SkillsCard = ({ requiredSkills, matchedSkills }) => {
   const missingSkills = requiredSkills.filter(
-    (skill) => !candidateSkills.includes(skill)
+    (skill) => !matchedSkills.includes(skill)
   );
 
-  const totalMatch = Math.round(
-    (matchedSkills.length / requiredSkills.length) * 100
+  const totalMatch = Math.min(
+    100,
+    Math.round((matchedSkills.length / requiredSkills.length) * 100)
   );
 
   const getKnobColor = (percent) => {

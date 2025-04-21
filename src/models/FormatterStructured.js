@@ -32,3 +32,13 @@ export const SchemaStructured = {
   workExperience: [],
   projectExperience: [ProjectExperience],
 };
+
+const SkillRequest = {
+  resumeData: SchemaStructured,
+  jobDescription: "",
+};
+
+const SkillResponse = {
+  requiredSills: [],
+  matchedSills: [],
+};
