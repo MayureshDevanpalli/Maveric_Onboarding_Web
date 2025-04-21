@@ -15,6 +15,10 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
 
   const handleSave = () => {
     setVisible(false);
+    const filteredExperience = professionalExperience.filter(
+      (exp) => exp.trim() !== ""
+    );
+    setProfessionalExperience(filteredExperience);
     experienceEmitter(professionalExperience);
   };
 
@@ -218,6 +222,7 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
                   onClick={handleAddExperience}
                 />
                 <Button
+                  disabled={selectedExperiences.length === 0}
                   label="Delete Selected"
                   style={{
                     width: "180px",
