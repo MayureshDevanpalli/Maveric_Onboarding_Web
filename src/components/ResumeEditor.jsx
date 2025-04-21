@@ -67,6 +67,13 @@ const ResumeEditor = ({ data }) => {
     }));
   };
 
+  const onCertsChanges = (updatedCerts) => {
+    setSchemaStructured((prevData) => ({
+      ...prevData,
+      certifications: updatedCerts,
+    }));
+  };
+
   return (
     <>
       {loading && <FullPageSpinner />}
@@ -94,6 +101,7 @@ const ResumeEditor = ({ data }) => {
         ></ProfessionalExperience>
         <CertificationsAndCourses
           certs={schemaStructured.certifications}
+          certEmitter={onCertsChanges}
         ></CertificationsAndCourses>
         <EducationAndQualifications
           eduList={schemaStructured.education}

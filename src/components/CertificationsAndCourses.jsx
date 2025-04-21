@@ -1,10 +1,59 @@
-import { useState } from "react";
-import { Button } from "primereact/button";
+import { useState, useRef } from "react";
+import { Dialog } from "primereact/dialog";
 import "primeicons/primeicons.css";
+import { Checkbox } from "primereact/checkbox";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Button } from "primereact/button";
 
-const CertificationsAndCourses = ({ certs }) => {
+const CertificationsAndCourses = ({ certs, certEmitter }) => {
   const [certificates, setCertificates] = useState(certs);
+  const [visible, setVisible] = useState(false);
+  const [selectedCerts, setSelectedCerts] = useState([]);
   const [hoveredItem, setHoveredItem] = useState(false);
+  const certsListRef = useRef(null);
+
+  const handleSave = () => {
+    setVisible(false);
+    const filteredCerts = certificates.filter((c) => c.trim() !== "");
+    setCertificates(filteredCerts);
+    certEmitter(certificates);
+  };
+
+  const onCertChanges = (e) => {
+    const index = parseInt(e.target.name, 10);
+    const updatedCerts = [...certificates];
+    updatedCerts[index] = e.target.value;
+    setCertificates(updatedCerts);
+  };
+
+  const handleReset = () => {
+    setCertificates(certs);
+  };
+
+  const handleAddCert = () => {
+    setCertificates([...certificates, ""]);
+    setTimeout(() => {
+      if (certsListRef.current) {
+        certsListRef.current.scrollTop = certsListRef.current.scrollHeight;
+      }
+    }, 0);
+  };
+
+  const toggleCheckbox = (index) => {
+    const updatedSelections = [...selectedCerts];
+    updatedSelections[index] = !updatedSelections[index];
+    setSelectedCerts(updatedSelections);
+  };
+
+  const handleDeleteSelected = () => {
+    const newExperiences = certificates.filter(
+      (_, index) => !selectedCerts[index]
+    );
+    const newSelections = selectedCerts.filter((selected) => !selected);
+    setCertificates(newExperiences);
+    setSelectedCerts(newSelections);
+  };
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -69,20 +118,125 @@ const CertificationsAndCourses = ({ certs }) => {
             </div>
           </div>
         </div>
-        {/*<Button
-          label="Edit Courses"
-          outlined
-          style={{
-            marginTop: "1rem",
-            width: "165px",
-            height: "50px",
-            marginLeft: "2rem",
-            borderRadius: "5px",
-            borderColor: "#1a4879",
-            color: "#1a4879",
-          }}
-        />*/}
       </div>
+      <Dialog
+        header="Professional Experience"
+        visible={visible}
+        style={{ width: "60vw", height: "80vh" }}
+        onHide={() => {
+          if (!visible) return;
+          handleReset();
+          setVisible(false);
+        }}
+      >
+        <div
+          style={{
+            padding: "1rem",
+            paddingTop: "0",
+            marginTop: "1rem",
+            display: "flex",
+            flexDirection: "column",
+            height: "95%",
+            justifyContent: "space-between",
+          }}
+        >
+          <div
+            style={{
+              overflowY: "auto",
+              marginBottom: "1rem",
+            }}
+            ref={certsListRef}
+          >
+            {certificates.map((skill, index) => (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "0.5rem",
+                }}
+                key={index}
+              >
+                <Checkbox
+                  style={{ marginRight: "1rem" }}
+                  checked={selectedCerts[index] || false}
+                  onChange={() => toggleCheckbox(index)}
+                ></Checkbox>
+                <InputTextarea
+                  key={index}
+                  rows={2}
+                  cols={107}
+                  name={index}
+                  autoResize="false"
+                  value={skill}
+                  onChange={onCertChanges}
+                  style={{ resize: "none" }}
+                />
+              </div>
+            ))}
+          </div>
+          <div
+            style={{
+              marginTop: "1rem",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <Button
+                label="Save"
+                outlined
+                style={{
+                  width: "122px",
+                  borderRadius: "5px",
+                  borderColor: "#c2257c",
+                  color: "#c2257c",
+                  marginRight: "1rem",
+                }}
+                onClick={handleSave}
+              />
+              <Button
+                label="Reset"
+                outlined
+                style={{
+                  width: "122px",
+                  borderRadius: "5px",
+                  borderColor: "#1a4879",
+                  color: "#1a4879",
+                  marginRight: "1rem",
+                }}
+                onClick={handleReset}
+              />
+            </div>
+            <div>
+              <Button
+                label="Add Experience"
+                outlined
+                style={{
+                  width: "200px",
+                  borderRadius: "5px",
+                  borderColor: "#4ade80",
+                  background: "#4ade80",
+                  color: "white",
+                  marginRight: "1rem",
+                }}
+                onClick={handleAddCert}
+              />
+              <Button
+                disabled={selectedCerts.length === 0}
+                label="Delete Selected"
+                style={{
+                  width: "180px",
+                  borderRadius: "5px",
+                  borderColor: "#f55442",
+                  background: "#f55442",
+                  color: "white",
+                }}
+                onClick={handleDeleteSelected}
+              />
+            </div>
+          </div>
+        </div>
+      </Dialog>
     </>
   );
 };
