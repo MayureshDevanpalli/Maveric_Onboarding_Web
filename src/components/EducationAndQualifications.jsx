@@ -1,10 +1,58 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "primereact/button";
 import "primeicons/primeicons.css";
+import { Checkbox } from "primereact/checkbox";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Dialog } from "primereact/dialog";
 
-const EducationAndQualifications = ({ eduList }) => {
+const EducationAndQualifications = ({ eduList, eduListEmitter }) => {
   const [education, setEducation] = useState(eduList);
+  const [visible, setVisible] = useState(false);
+  const [selectedEduList, setSelectedEduList] = useState([]);
   const [hoveredItem, setHoveredItem] = useState(false);
+  const eduListRef = useRef(null);
+
+  const handleSave = () => {
+    setVisible(false);
+    const filteredCerts = education.filter((c) => c.trim() !== "");
+    setEducation(filteredCerts);
+    eduListEmitter(education);
+  };
+
+  const onCertChanges = (e) => {
+    const index = parseInt(e.target.name, 10);
+    const updatedCerts = [...education];
+    updatedCerts[index] = e.target.value;
+    setEducation(updatedCerts);
+  };
+
+  const handleReset = () => {
+    setEducation(eduList);
+  };
+
+  const handleAddCert = () => {
+    setEducation([...education, ""]);
+    setTimeout(() => {
+      if (eduListRef.current) {
+        eduListRef.current.scrollTop = eduListRef.current.scrollHeight;
+      }
+    }, 0);
+  };
+
+  const toggleCheckbox = (index) => {
+    const updatedSelections = [...selectedEduList];
+    updatedSelections[index] = !updatedSelections[index];
+    setSelectedEduList(updatedSelections);
+  };
+
+  const handleDeleteSelected = () => {
+    const newExperiences = education.filter(
+      (_, index) => !selectedEduList[index]
+    );
+    const newSelections = selectedEduList.filter((selected) => !selected);
+    setEducation(newExperiences);
+    setSelectedEduList(newSelections);
+  };
 
   return (
     <>
@@ -30,14 +78,6 @@ const EducationAndQualifications = ({ eduList }) => {
           >
             Educational Qualification
           </div>
-          {/* <div>
-            <ul>
-              {education.map((skill, index) => (
-                <li key={index}>{skill}</li>
-              ))}
-            </ul>
-          </div> */}
-
           <div
             style={{
               display: "flex",
@@ -55,7 +95,6 @@ const EducationAndQualifications = ({ eduList }) => {
                 ))}
               </ul>
             </div>
-
             <div
               style={{
                 width: "2%",
@@ -78,20 +117,125 @@ const EducationAndQualifications = ({ eduList }) => {
             </div>
           </div>
         </div>
-        {/*<Button
-          label="Edit Education"
-          outlined
-          style={{
-            marginTop: "1rem",
-            width: "165px",
-            height: "50px",
-            marginLeft: "2rem",
-            borderRadius: "5px",
-            borderColor: "#1a4879",
-            color: "#1a4879",
-          }}
-        />>*/}
       </div>
+      <Dialog
+        header="Professional Experience"
+        visible={visible}
+        style={{ width: "60vw", height: "80vh" }}
+        onHide={() => {
+          if (!visible) return;
+          handleReset();
+          setVisible(false);
+        }}
+      >
+        <div
+          style={{
+            padding: "1rem",
+            paddingTop: "0",
+            marginTop: "1rem",
+            display: "flex",
+            flexDirection: "column",
+            height: "95%",
+            justifyContent: "space-between",
+          }}
+        >
+          <div
+            style={{
+              overflowY: "auto",
+              marginBottom: "1rem",
+            }}
+            ref={eduListRef}
+          >
+            {education.map((skill, index) => (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "0.5rem",
+                }}
+                key={index}
+              >
+                <Checkbox
+                  style={{ marginRight: "1rem" }}
+                  checked={selectedEduList[index] || false}
+                  onChange={() => toggleCheckbox(index)}
+                ></Checkbox>
+                <InputTextarea
+                  key={index}
+                  rows={2}
+                  cols={107}
+                  name={index}
+                  autoResize="false"
+                  value={skill}
+                  onChange={onCertChanges}
+                  style={{ resize: "none" }}
+                />
+              </div>
+            ))}
+          </div>
+          <div
+            style={{
+              marginTop: "1rem",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <Button
+                label="Save"
+                outlined
+                style={{
+                  width: "122px",
+                  borderRadius: "5px",
+                  borderColor: "#c2257c",
+                  color: "#c2257c",
+                  marginRight: "1rem",
+                }}
+                onClick={handleSave}
+              />
+              <Button
+                label="Reset"
+                outlined
+                style={{
+                  width: "122px",
+                  borderRadius: "5px",
+                  borderColor: "#1a4879",
+                  color: "#1a4879",
+                  marginRight: "1rem",
+                }}
+                onClick={handleReset}
+              />
+            </div>
+            <div>
+              <Button
+                label="Add Experience"
+                outlined
+                style={{
+                  width: "200px",
+                  borderRadius: "5px",
+                  borderColor: "#4ade80",
+                  background: "#4ade80",
+                  color: "white",
+                  marginRight: "1rem",
+                }}
+                onClick={handleAddCert}
+              />
+              <Button
+                disabled={selectedEduList.length === 0}
+                label="Delete Selected"
+                style={{
+                  width: "180px",
+                  borderRadius: "5px",
+                  borderColor: "#f55442",
+                  background: "#f55442",
+                  color: "white",
+                }}
+                onClick={handleDeleteSelected}
+              />
+            </div>
+          </div>
+        </div>
+      </Dialog>
     </>
   );
 };

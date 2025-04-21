@@ -74,6 +74,13 @@ const ResumeEditor = ({ data }) => {
     }));
   };
 
+  const onEduListChanges = (updatedEduList) => {
+    setSchemaStructured((prevData) => ({
+      ...prevData,
+      education: updatedEduList,
+    }));
+  };
+
   return (
     <>
       {loading && <FullPageSpinner />}
@@ -105,6 +112,7 @@ const ResumeEditor = ({ data }) => {
         ></CertificationsAndCourses>
         <EducationAndQualifications
           eduList={schemaStructured.education}
+          eduListEmitter={onEduListChanges}
         ></EducationAndQualifications>
         <Credits creditMap={schemaStructured.credits}></Credits>
         <ProjectExperience
