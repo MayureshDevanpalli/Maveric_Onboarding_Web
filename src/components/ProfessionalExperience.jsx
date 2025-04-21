@@ -137,11 +137,14 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
               padding: "1rem",
               paddingTop: "0",
               marginTop: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              height: "95%",
+              justifyContent: "space-between",
             }}
           >
             <div
               style={{
-                maxHeight: "550px",
                 overflowY: "auto",
                 marginBottom: "1rem",
               }}
