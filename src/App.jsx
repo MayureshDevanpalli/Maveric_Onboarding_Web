@@ -91,7 +91,7 @@ function App() {
     toast.current.show({
       severity: "success",
       summary: "Success",
-      detail: "Extract data from file " + file.name,
+      detail: "Extracting data from " + file.name + ".\n Please wait...",
     });
 
     // set file name and size
@@ -128,6 +128,14 @@ function App() {
       setLoading(false);
       console.error("Error:", error);
     }
+  };
+
+  const refreshInsights = () => {
+    toast.current.show({
+      severity: "success",
+      summary: "Success",
+      detail: "Refresh insights coming soon",
+    });
   };
 
   return (
@@ -234,6 +242,7 @@ function App() {
                   candidateSkills={candidateSkills}
                 />
                 <Button
+                  onClick={refreshInsights}
                   label="Refresh Insights"
                   outlined
                   style={{
