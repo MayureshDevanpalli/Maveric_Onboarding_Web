@@ -208,15 +208,10 @@ function App() {
         </div>
         <div style={{ marginBottom: "1rem" }}>
           <Card
-            title="Skill Match Insights"
+            title="Preview Resume"
             style={{ backgroundColor: "#f1f1f1", color: "#1a4879" }}
           >
-            {schemaStructured && (
-              <SkillsCard
-                requiredSkills={requiredSkills}
-                candidateSkills={candidateSkills}
-              />
-            )}
+            {schemaStructured && <ResumeEditor data={schemaStructured} />}
             {!schemaStructured && (
               <div style={{ textAlign: "center" }}>no file selected</div>
             )}
@@ -224,10 +219,36 @@ function App() {
         </div>
         <div style={{ marginBottom: "1rem" }}>
           <Card
-            title="Preview Resume"
+            title="Skill Match Insights"
             style={{ backgroundColor: "#f1f1f1", color: "#1a4879" }}
           >
-            {schemaStructured && <ResumeEditor data={schemaStructured} />}
+            {schemaStructured && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <SkillsCard
+                  requiredSkills={requiredSkills}
+                  candidateSkills={candidateSkills}
+                />
+                <Button
+                  label="Refresh Insights"
+                  outlined
+                  style={{
+                    marginTop: "1rem",
+                    width: "200px",
+                    height: "50px",
+                    marginLeft: "1rem",
+                    borderRadius: "5px",
+                    borderColor: "#1a4879",
+                    color: "#1a4879",
+                    alignSelf: "center",
+                  }}
+                />
+              </div>
+            )}
             {!schemaStructured && (
               <div style={{ textAlign: "center" }}>no file selected</div>
             )}

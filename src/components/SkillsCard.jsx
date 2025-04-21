@@ -1,6 +1,7 @@
 import { Tag } from "primereact/tag";
 import { Knob } from "primereact/knob";
 import { Divider } from "primereact/divider";
+import { Button } from "primereact/button";
 
 const SkillsCard = ({ requiredSkills, candidateSkills }) => {
   const matchedSkills = requiredSkills.filter((skill) =>
