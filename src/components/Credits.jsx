@@ -31,9 +31,10 @@ const Credits = ({ creditMap }) => {
     setEditedValues(updatedValues);
   };
 
-  const handleReset = () => {    
-    setEditedValues(credits.map((credit) => credit.items.join(", ")))
+  const handleReset = () => {
+    setEditedValues(credits.map((credit) => credit.items.join(", ")));
   };
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -133,6 +134,10 @@ const Credits = ({ creditMap }) => {
             style={{
               padding: "1rem",
               paddingTop: "0",
+              marginTop: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
             }}
           >
             <div>
@@ -152,20 +157,28 @@ const Credits = ({ creditMap }) => {
                           {credit.category}
                         </span>
                       </td>
-                      <td>
+                      <td
+                        style={{
+                          padding: "2px",
+                          display: "flex",
+                          borderLeft: "none",
+                        }}
+                      >
                         <InputTextarea
                           key={index}
-                          rows={2}
-                          cols={80}
                           name={index}
                           autoResize="false"
-                          type="text"
                           value={editedValues[index]}
-                          onChange={(e) =>
-                            handleChange(e.target.value, index)
-                          }
-                          style={{ resize: "none", width: "100%", padding: 0, border: "none", borderRadius: 0 }}
-
+                          onChange={(e) => handleChange(e.target.value, index)}
+                          style={{
+                            resize: "none",
+                            padding: 0,
+                            border: "none",
+                            borderRadius: 0,
+                            width: "100%",
+                            maxHeight: "5rem",
+                            overflowY: "auto",
+                          }}
                         />
                       </td>
                     </tr>
