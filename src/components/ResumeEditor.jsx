@@ -8,38 +8,42 @@ import CertificationsAndCourses from "./CertificationsAndCourses";
 import EducationAndQualifications from "./EducationAndQualifications";
 import Credits from "./Credits";
 import ProjectExperience from "./ProjectExperience";
+import FullPageSpinner from "./FullPageSpinner";
 
 const ResumeEditor = ({ data }) => {
   const [schemaStructured, setSchemaStructured] = useState(data);
+  const [loading, setLoading] = useState(false);
   const toast = useRef(null);
 
   const downloadResume = () => {
-    // fetch("http://localhost:8080/api/resume/download-resume", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(schemaStructured),
-    // })
-    //   .then((response) => {
-    //     const fileName =
-    //       response.headers.get("X-Filename") || "downloaded-file.docx";
-    //     return response.blob().then((blob) => ({ blob, fileName }));
-    //   })
-    //   .then(({ blob, fileName }) => {
-    //     const url = window.URL.createObjectURL(blob);
-    //     const link = document.createElement("a");
-    //     link.href = url;
-    //     link.setAttribute("download", fileName);
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     link.remove();
-    //   });
-    toast.current.show({
-      severity: "success",
-      summary: "Success",
-      detail: "File downloaded successfully",
-    });
+    setLoading(true);
+    fetch("http://localhost:8080/api/resume/download-resume", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(schemaStructured),
+    })
+      .then((response) => {
+        const fileName =
+          response.headers.get("X-Filename") || "downloaded-file.docx";
+        return response.blob().then((blob) => ({ blob, fileName }));
+      })
+      .then(({ blob, fileName }) => {
+        toast.current.show({
+          severity: "success",
+          summary: "Success",
+          detail: "Downloading Resume .....",
+        });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setLoading(false);
+      });
   };
 
   const onHeaderChanges = (updatedHeaders) => {
@@ -65,6 +69,7 @@ const ResumeEditor = ({ data }) => {
 
   return (
     <>
+      {loading && <FullPageSpinner />}
       <Toast ref={toast}></Toast>
       <div
         style={{

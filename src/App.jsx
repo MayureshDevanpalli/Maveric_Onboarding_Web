@@ -5,10 +5,10 @@ import { FileUpload } from "primereact/fileupload";
 import { Image } from "primereact/image";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { ProgressSpinner } from "primereact/progressspinner";
 import ResumeEditor from "./components/ResumeEditor";
 import "./App.css";
 import SkillsCard from "./components/SkillsCard";
+import FullPageSpinner from "./components/FullPageSpinner";
 
 // severity?: 'success' | 'info' | 'warn' | 'error' | 'secondary' | 'contrast'
 
@@ -16,19 +16,6 @@ const navStyle = {
   display: "flex",
   alignItems: "center",
   marginTop: "1rem",
-};
-
-const progressSpinnerStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  height: "100vh",
-  width: "100vw",
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 9999,
 };
 
 function App() {
@@ -141,14 +128,6 @@ function App() {
       setLoading(false);
       console.error("Error:", error);
     }
-  };
-
-  const FullPageSpinner = () => {
-    return (
-      <div style={progressSpinnerStyle}>
-        <ProgressSpinner animationDuration="0.5s" />
-      </div>
-    );
   };
 
   return (
