@@ -25,13 +25,6 @@ function App() {
   const [schemaStructured, setSchemaStructured] = useState(null);
   const [requiredSkills, setRequiredSkills] = useState([]);
   const [matchedSills, setMatchedSills] = useState([]);
-  const editorRef = useRef();
-
-  const handleSave = () => {
-    const content = editorRef.current.innerText;
-    console.log("Edited Content:", content);
-    // Save to backend or further processing
-  };
 
   const allowedTypes = [
     "application/pdf",
@@ -104,14 +97,6 @@ function App() {
     }
   };
 
-  const refreshInsights = () => {
-    toast.current.show({
-      severity: "success",
-      summary: "Success",
-      detail: "Refresh insights coming soon",
-    });
-  };
-
   const matchSkills = async () => {
     const a = {};
     setLoading(true);
@@ -124,6 +109,11 @@ function App() {
     })
       .then((response) => response.json())
       .then((data) => {
+        toast.current.show({
+          severity: "success",
+          summary: "Success",
+          detail: "Refresh skills match insights successfully",
+        });
         setLoading(false);
         const requiredSkills = data.requiredSills;
         const matchedSkills = data.matchedSills;
