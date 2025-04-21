@@ -18,6 +18,10 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
     summaryEmitter(professionalSummary);
   };
 
+  const handleReset = () => {
+    setUpdatedSummary(summary);
+  };
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -79,20 +83,6 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
             </div>
           </div>
         </div>
-        {/*<Button
-          label="Edit Summary"
-          outlined
-          style={{
-            marginTop: "1rem",
-            width: "165px",
-            height: "50px",
-            marginLeft: "2rem",
-            borderRadius: "5px",
-            borderColor: "#1a4879",
-            color: "#1a4879",
-          }}
-          onClick={() => setVisible(true)}
-        />*/}
         <Dialog
           header="Professional Summary"
           visible={visible}
@@ -102,30 +92,53 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
             setVisible(false);
           }}
         >
-          <div className="p-1 flex gap-3">
-            <InputTextarea
-              rows={10}
-              cols={180}
-              autoResize="false"
-              name="summary"
-              value={professionalSummary}
-              onChange={onSummaryChanges}
-              placeholder="professional Summary"
-              style={{ resize: "none", textAlign: "justify" }}
-            />
-          </div>
-          <div style={{ display: "flex" }}>
-            <Button
-              label="Save"
-              outlined
-              style={{
-                width: "122px",
-                borderRadius: "5px",
-                borderColor: "#c2257c",
-                color: "#c2257c",
-              }}
-              onClick={handleSave}
-            />
+          <div
+            style={{
+              padding: "1rem",
+              paddingTop: "0",
+            }}
+          >
+            <div>
+              <InputTextarea
+                rows={10}
+                autoResize="false"
+                name="summary"
+                value={professionalSummary}
+                onChange={onSummaryChanges}
+                placeholder="professional Summary"
+                style={{
+                  resize: "none",
+                  textAlign: "justify",
+                  width: "100%",
+                  marginTop: "1rem",
+                }}
+              />
+            </div>
+            <div style={{ marginTop: "1rem" }}>
+              <Button
+                label="Save"
+                outlined
+                style={{
+                  width: "122px",
+                  borderRadius: "5px",
+                  borderColor: "#c2257c",
+                  color: "#c2257c",
+                }}
+                onClick={handleSave}
+              />
+              <Button
+                label="Reset"
+                outlined
+                style={{
+                  width: "122px",
+                  borderRadius: "5px",
+                  borderColor: "#1a4879",
+                  color: "#1a4879",
+                  marginLeft: "1rem",
+                }}
+                onClick={handleReset}
+              />
+            </div>
           </div>
         </Dialog>
       </div>
