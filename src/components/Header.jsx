@@ -3,8 +3,7 @@ import { Image } from "primereact/image";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import 'primeicons/primeicons.css';
-
+import "primeicons/primeicons.css";
 
 const Header = ({ headers, headersEmitter }) => {
   const [visible, setVisible] = useState(false);
@@ -14,7 +13,7 @@ const Header = ({ headers, headersEmitter }) => {
   const [updatedHeaders, setUpdatedHeaders] = useState(headers);
 
   // Function to handle changes in the input fields
-  const onHeadersChanges = (e) => {
+  const onHeadersEdit = (e) => {
     const { name, value } = e.target;
     setUpdatedHeaders((prev) => ({
       ...prev,
@@ -28,6 +27,10 @@ const Header = ({ headers, headersEmitter }) => {
     headersEmitter(updatedHeaders);
   };
 
+  const handleReset = () => {
+    setUpdatedHeaders(headers);
+  };
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -39,7 +42,8 @@ const Header = ({ headers, headersEmitter }) => {
             paddingRight: "5rem",
             width: "85vw",
             paddingTop: "2rem",
-          }}>
+          }}
+        >
           <div>
             <Image
               src="src/assets/Maveric_Systems_Logo.jpg"
@@ -50,23 +54,44 @@ const Header = ({ headers, headersEmitter }) => {
             />
           </div>
           <br />
-          <div style={{ width: '100%', display: "flex", justifyContent: "space-between" }}
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
             onMouseEnter={() => setHoveredItem(true)}
-            onMouseLeave={() => setHoveredItem(null)}>
-              
-            <div style={{
-              width: '98%',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'}}>
-              <div style={{ opacity: "0.7", fontSize: "1rem"}}>
+            onMouseLeave={() => setHoveredItem(null)}
+          >
+            <div
+              style={{
+                width: "98%",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div style={{ opacity: "0.7", fontSize: "1rem" }}>
                 {headers.candidateName}
               </div>
-              <div style={{ opacity: "0.7", fontSize: "1rem", justifySelf: 'end', paddingRight: 16 }}>
+              <div
+                style={{
+                  opacity: "0.7",
+                  fontSize: "1rem",
+                  justifySelf: "end",
+                  paddingRight: 16,
+                }}
+              >
                 {headers.candidatePosition}
               </div>
             </div>
-            <div style={{ width: '2%', display: 'flex', justifyContent: 'flex-end'}}>
+            <div
+              style={{
+                width: "2%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
@@ -75,49 +100,49 @@ const Header = ({ headers, headersEmitter }) => {
                     fontSize: "1.1rem",
                     color: "gray",
                     cursor: "pointer",
-                  }}>
-                </i>
+                  }}
+                ></i>
               )}
             </div>
           </div>
         </div>
-        {/*<Button
-          label="Edit Headers"
-          outlined
-          style={{
-            width: "165px",
-            height: "50px",
-            marginLeft: "2rem",
-            borderRadius: "5px",
-            borderColor: "#1a4879",
-            color: "#1a4879",
-          }}
-          onClick={() => setVisible(true)}
-        />*/}
         <Dialog
           header="Header"
           visible={visible}
-          style={{ width: "30vw" }}
+          style={{ width: "50dvw" }}
           onHide={() => {
             if (!visible) return;
             setVisible(false);
           }}
         >
-          <div className="p-1 flex gap-3" style={{ marginBottom: "1rem" }}>
-            <InputText
-              name="candidateName"
-              value={updatedHeaders.candidateName}
-              onChange={onHeadersChanges}
-              placeholder="Candidate Name"
-            />
-            <InputText
-              name="candidatePosition"
-              value={updatedHeaders.candidatePosition}
-              onChange={onHeadersChanges}
-              placeholder="Candidate Position"
-            />
+          <div
+            style={{
+              padding: "1rem",
+              paddingTop: "0",
+              display: "flex",
+              gap: "2rem",
+            }}
+          >
+            <div>
+              <div>Candidate Name: </div>
+              <InputText
+                name="candidateName"
+                value={updatedHeaders.candidateName}
+                onChange={onHeadersEdit}
+                placeholder="Candidate Name"
+              />
+            </div>
+            <div>
+              <div>Candidate Position: </div>
+              <InputText
+                name="candidatePosition"
+                value={updatedHeaders.candidatePosition}
+                onChange={onHeadersEdit}
+                placeholder="Candidate Position"
+              />
+            </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div>
             <Button
               label="Save"
               outlined
@@ -126,10 +151,23 @@ const Header = ({ headers, headersEmitter }) => {
                 borderRadius: "5px",
                 borderColor: "#c2257c",
                 color: "#c2257c",
+                marginLeft: "1rem",
               }}
               onClick={handleSave}
             />
-          </div>{" "}
+            <Button
+              label="Reset"
+              outlined
+              style={{
+                width: "122px",
+                borderRadius: "5px",
+                borderColor: "#1a4879",
+                color: "#1a4879",
+                marginLeft: "1rem",
+              }}
+              onClick={handleReset}
+            />
+          </div>
         </Dialog>
       </div>
     </>
