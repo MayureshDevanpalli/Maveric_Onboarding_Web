@@ -17,6 +17,7 @@ const CertificationsAndCourses = ({ certs, certEmitter }) => {
     const filteredCerts = certificates.filter((c) => c.trim() !== "");
     setCertificates(filteredCerts);
     certEmitter(certificates);
+    setVisible(false);
   };
 
   const onCertChanges = (e) => {

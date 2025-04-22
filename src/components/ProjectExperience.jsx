@@ -1,10 +1,34 @@
 import { Button } from "primereact/button";
 import React, { useState } from "react";
 import "primeicons/primeicons.css";
+import { Dialog } from "primereact/dialog";
+import { InputTextarea } from "primereact/inputtextarea";
+import { InputText } from "primereact/inputtext";
 
-const ProjectExperience = ({ experience }) => {
+const ProjectExperience = ({ projects, projectEmitter }) => {
   const [hoveredItem, setHoveredItem] = useState(false);
-  const [projectExperience, setProjectExperience] = useState(experience);
+  const [visible, setVisible] = useState(false);
+  const [projectExperience, setProjectExperience] = useState(projects);
+
+  const handleEditClick = () => {
+    setVisible(true);
+  };
+
+  const handleReset = () => {
+    setProjectExperience(projects.map((p) => ({ ...p })));
+  };
+
+  const handleSave = () => {
+    setProjectExperience(projectExperience);
+    projectEmitter(projectExperience);
+    setVisible(false);
+  };
+
+  const handleChange = (value, field, index) => {
+    const updated = [...projectExperience];
+    updated[index][field] = value;
+    setProjectExperience(updated);
+  };
 
   return (
     <>
@@ -122,6 +146,7 @@ const ProjectExperience = ({ experience }) => {
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
+                  onClick={handleEditClick}
                   style={{
                     fontSize: "1.1rem",
                     color: "gray",
@@ -133,6 +158,231 @@ const ProjectExperience = ({ experience }) => {
             </div>
           </div>
         </div>
+        <Dialog
+          header="Project Experience"
+          visible={visible}
+          style={{ width: "85vw", height: "90vh" }}
+          onHide={() => {
+            if (!visible) return;
+            setVisible(false);
+          }}
+        >
+          <div
+            style={{
+              padding: "1rem",
+              paddingTop: "0",
+              marginTop: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              height: "99%",
+            }}
+          >
+            <div style={{ width: "98%", height: "500px", overflowY: "auto" }}>
+              <table
+                className="table table-bordered"
+                style={{ borderColor: "black" }}
+              >
+                <tbody>
+                  {projectExperience.map((exp, index) => (
+                    <tr key={index}>
+                      <td
+                        scope="row"
+                        style={{ backgroundColor: "lightGrey" }}
+                        width="35%"
+                      >
+                        <table width={"100%"}>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <span style={{ fontWeight: "bold" }}>
+                                  Client:
+                                </span>
+                              </td>
+                              <td>
+                                <InputText
+                                  value={exp.client}
+                                  onChange={(e) =>
+                                    handleChange(
+                                      e.target.value,
+                                      "client",
+                                      index
+                                    )
+                                  }
+                                  style={{ width: "100%" }}
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <span style={{ fontWeight: "bold" }}>
+                                  Project:
+                                </span>
+                              </td>
+                              <td>
+                                <input
+                                  value={exp.project}
+                                  onChange={(e) =>
+                                    handleChange(
+                                      e.target.value,
+                                      "project",
+                                      index
+                                    )
+                                  }
+                                  style={{ width: "100%" }}
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <span style={{ fontWeight: "bold" }}>
+                                  Location:
+                                </span>
+                              </td>
+                              <td>
+                                <input
+                                  value={exp.location}
+                                  onChange={(e) =>
+                                    handleChange(
+                                      e.target.value,
+                                      "location",
+                                      index
+                                    )
+                                  }
+                                  style={{ width: "100%" }}
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <span style={{ fontWeight: "bold" }}>
+                                  Role:
+                                </span>{" "}
+                              </td>
+                              <td>
+                                <input
+                                  value={exp.role}
+                                  onChange={(e) =>
+                                    handleChange(e.target.value, "role", index)
+                                  }
+                                  style={{ width: "100%" }}
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <span style={{ fontWeight: "bold" }}>
+                                  Duration:
+                                </span>
+                              </td>
+                              <td>
+                                <input
+                                  value={exp.duration}
+                                  onChange={(e) =>
+                                    handleChange(
+                                      e.target.value,
+                                      "duration",
+                                      index
+                                    )
+                                  }
+                                  style={{ width: "100%" }}
+                                />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <span style={{ fontWeight: "bold" }}>
+                                  Tools:
+                                </span>
+                              </td>
+                              <td>
+                                <input
+                                  value={exp.tools}
+                                  onChange={(e) =>
+                                    handleChange(e.target.value, "tools", index)
+                                  }
+                                  style={{ width: "100%" }}
+                                />
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                      <td>
+                        <div>
+                          <div style={{ fontWeight: "bold" }}>Description:</div>
+                          <div
+                            style={{
+                              marginBottom: "1rem",
+                              paddingLeft: "1rem",
+                              paddingRight: "1rem",
+                              textAlign: "justify",
+                            }}
+                          >
+                            <InputTextarea
+                              key={index}
+                              name={index}
+                              autoResize="false"
+                              value={exp.description}
+                              onChange={(e) =>
+                                handleChange(
+                                  e.target.value,
+                                  "description",
+                                  index
+                                )
+                              }
+                              style={{
+                                resize: "none",
+                                padding: 0,
+                                borderRadius: 0,
+                                width: "100%",
+                                maxHeight: "5rem",
+                                overflowY: "auto",
+                              }}
+                            />
+                          </div>
+                          <div style={{ fontWeight: "bold" }}>
+                            Responsibilities:
+                          </div>
+                          <ul>
+                            {exp.responsibilities?.map((skill, skillIndex) => (
+                              <li key={skillIndex}>{skill}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div style={{ marginTop: "1rem" }}>
+              <Button
+                label="Save"
+                outlined
+                style={{
+                  width: "122px",
+                  borderRadius: "5px",
+                  borderColor: "#c2257c",
+                  color: "#c2257c",
+                }}
+                onClick={handleSave}
+              />
+              <Button
+                label="Reset"
+                outlined
+                style={{
+                  width: "122px",
+                  borderRadius: "5px",
+                  borderColor: "#1a4879",
+                  color: "#1a4879",
+                  marginLeft: "1rem",
+                }}
+                onClick={handleReset}
+              />
+            </div>
+          </div>
+        </Dialog>
       </div>
     </>
   );

@@ -23,8 +23,8 @@ const Header = ({ headers, headersEmitter }) => {
 
   // Function to handle the save button click
   const handleSave = () => {
-    setVisible(false);
     headersEmitter(updatedHeaders);
+    setVisible(false);
   };
 
   const handleReset = () => {

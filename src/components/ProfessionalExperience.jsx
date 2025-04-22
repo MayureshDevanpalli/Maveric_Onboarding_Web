@@ -14,12 +14,12 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
   const experienceListRef = useRef(null);
 
   const handleSave = () => {
-    setVisible(false);
     const filteredExperience = professionalExperience.filter(
       (exp) => exp.trim() !== ""
     );
     setProfessionalExperience(filteredExperience);
     experienceEmitter(professionalExperience);
+    setVisible(false);
   };
 
   const onExperienceChanges = (e) => {

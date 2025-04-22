@@ -14,8 +14,8 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
   };
 
   const handleSave = () => {
-    setVisible(false);
     summaryEmitter(professionalSummary);
+    setVisible(false);
   };
 
   const handleReset = () => {

@@ -4,7 +4,7 @@ import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import "primeicons/primeicons.css";
 
-const Credits = ({ creditMap }) => {
+const Credits = ({ creditMap, creditEmitter }) => {
   const [hoveredItem, setHoveredItem] = useState(false);
   const [credits, setCredits] = useState(creditMap);
   const [visible, setVisible] = useState(false);
@@ -16,12 +16,14 @@ const Credits = ({ creditMap }) => {
     setVisible(true);
     setEditedValues(credits.map((credit) => credit.items.join(", ")));
   };
+
   const handleSave = () => {
     const updatedCredits = credits.map((credit, index) => ({
       ...credit,
       items: editedValues[index].split(",").map((item) => item.trim()),
     }));
     setCredits(updatedCredits);
+    creditEmitter(updatedCredits);
     setVisible(false);
   };
 
@@ -138,6 +140,7 @@ const Credits = ({ creditMap }) => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
+              height: "99%",
             }}
           >
             <div>

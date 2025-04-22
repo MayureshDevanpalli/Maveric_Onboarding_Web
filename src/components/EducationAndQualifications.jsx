@@ -17,6 +17,7 @@ const EducationAndQualifications = ({ eduList, eduListEmitter }) => {
     const filteredCerts = education.filter((c) => c.trim() !== "");
     setEducation(filteredCerts);
     eduListEmitter(education);
+    setVisible(false);
   };
 
   const onCertChanges = (e) => {

@@ -81,6 +81,20 @@ const ResumeEditor = ({ data }) => {
     }));
   };
 
+  const onCreditsChanges = (updatedCredits) => {
+    setSchemaStructured((prevData) => ({
+      ...prevData,
+      credits: updatedCredits,
+    }));
+  };
+
+  const onProjectChanges = (updatedProjects) => {
+    setSchemaStructured((prevData) => ({
+      ...prevData,
+      projectExperience: updatedProjects,
+    }));
+  };
+
   return (
     <>
       {loading && <FullPageSpinner />}
@@ -114,9 +128,13 @@ const ResumeEditor = ({ data }) => {
           eduList={schemaStructured.education}
           eduListEmitter={onEduListChanges}
         ></EducationAndQualifications>
-        <Credits creditMap={schemaStructured.credits}></Credits>
+        <Credits
+          creditMap={schemaStructured.credits}
+          creditEmitter={onCreditsChanges}
+        ></Credits>
         <ProjectExperience
-          experience={schemaStructured.projectExperience}
+          projects={schemaStructured.projectExperience}
+          projectEmitter={onProjectChanges}
         ></ProjectExperience>
         <Button
           onClick={downloadResume}
