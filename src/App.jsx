@@ -23,8 +23,8 @@ function App() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [schemaStructured, setSchemaStructured] = useState(null);
-  const [requiredSkills, setRequiredSkills] = useState([]);
-  const [matchedSills, setMatchedSills] = useState([]);
+  const [requiredSkills, setRequiredSkills] = useState(null);
+  const [matchedSills, setMatchedSills] = useState(null);
 
   const allowedTypes = [
     "application/pdf",
@@ -90,7 +90,9 @@ function App() {
 
       setSchemaStructured(mappedSchema);
       setLoading(false);
-      matchSkills();
+      setTimeout(() => {
+        matchSkills();
+      }, 0);
     } catch (error) {
       setLoading(false);
       console.error("Error:", error);
@@ -98,14 +100,77 @@ function App() {
   };
 
   const matchSkills = async () => {
-    const a = {};
+    const resumeDataTemp = schemaStructured;
+    const jobDescription = `Job Title: Senior Software Developer
+Experience: 5 to 9 Years
+Location: [Your Location or "Remote"]
+Employment Type: Full-time
+
+Job Summary:
+We are looking for a passionate and skilled Senior Software Developer with 5–9 years of experience to join our dynamic team. The ideal candidate will have strong expertise in Spring Boot, React, and Angular, along with a solid understanding of software design patterns, unit and integration testing, and experience working with cloud technologies (AWS, Azure, or GCP).
+
+You will play a key role in designing and developing scalable applications, collaborating with cross-functional teams, and contributing to the overall architecture and engineering best practices.
+
+Key Responsibilities:
+Design, develop, and maintain backend services using Spring Boot
+
+Develop responsive and dynamic frontend applications using React and Angular
+
+Collaborate with product owners, architects, and QA to understand requirements and deliver high-quality features
+
+Apply design patterns and best practices to build robust and maintainable code
+
+Write and maintain unit, integration, and end-to-end tests
+
+Participate in code reviews, design discussions, and sprint planning
+
+Deploy and maintain applications on cloud platforms (AWS/Azure/GCP)
+
+Ensure performance, security, and scalability of applications
+
+Mentor junior developers and contribute to team growth
+
+Required Skills:
+5 to 9 years of hands-on experience in software development
+
+Strong proficiency in Java, Spring Boot, and RESTful API development
+
+Experience with React and Angular (must be comfortable with both frameworks)
+
+Solid understanding of object-oriented design and design patterns
+
+Experience with unit testing frameworks (e.g., JUnit, Mockito) and frontend testing (e.g., Jest, Cypress)
+
+Experience with CI/CD pipelines and DevOps practices
+
+Good knowledge of cloud services (AWS, Azure, or GCP)
+
+Familiarity with containerization technologies (e.g., Docker, Kubernetes) is a plus
+
+Excellent problem-solving skills and a proactive attitude
+
+Nice to Have:
+Experience in microservices architecture
+
+Exposure to monitoring and logging tools (e.g., Prometheus, Grafana, ELK)
+
+Knowledge of Agile/Scrum methodologies
+
+Familiarity with GraphQL or WebSocket-based communication
+
+Education:
+Bachelor’s or Master’s degree in Computer Science, Engineering, or a related field`;
+
     setLoading(true);
-    await fetch("http://localhost:8080/api/resume/match-skills", {
+    await fetch("http://localhost:8080/api/resume/extract-skills", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(a),
+      body: JSON.stringify({
+        resumeData: resumeDataTemp,
+        jobDescription: jobDescription,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -115,10 +180,10 @@ function App() {
           detail: "Refresh skills match insights successfully",
         });
         setLoading(false);
-        const requiredSkills = data.requiredSills;
-        const matchedSkills = data.matchedSills;
-        setRequiredSkills(requiredSkills || []);
-        setMatchedSills(matchedSkills || []);
+        const requiredSkills = data.requiredSkills;
+        const matchedSkills = data.matchedSkills;
+        setRequiredSkills(requiredSkills);
+        setMatchedSills(matchedSkills);
       })
       .catch((error) => console.error("Error:", error));
   };
@@ -219,7 +284,7 @@ function App() {
             title="Skill Match Insights"
             style={{ backgroundColor: "#f1f1f1", color: "#1a4879" }}
           >
-            {schemaStructured && (
+            {requiredSkills && matchedSills && (
               <div
                 style={{
                   display: "flex",
