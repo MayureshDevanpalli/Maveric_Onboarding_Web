@@ -103,6 +103,7 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
           </div>
         </div>
         <Dialog
+          draggable={false}
           header={headerElement}
           visible={visible}
           style={{ width: "50vw" }}

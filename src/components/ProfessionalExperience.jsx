@@ -123,6 +123,7 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
           </div>
         </div>
         <Dialog
+          draggable={false}
           header="Professional Experience"
           visible={visible}
           style={{ width: "60vw", height: "80vh" }}
