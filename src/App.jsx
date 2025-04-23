@@ -289,6 +289,7 @@ Bachelor’s or Master’s degree in Computer Science, Engineering, or a related
                 style={{
                   display: "flex",
                   flexDirection: "column",
+                  gap: "4rem",
                 }}
               >
                 <SkillsCard

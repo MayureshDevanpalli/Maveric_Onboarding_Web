@@ -1,13 +1,15 @@
 import { Button } from "primereact/button";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
+import { OverlayPanel } from "primereact/overlaypanel";
 import "primeicons/primeicons.css";
 
 const ProfessionalSummary = ({ summary, summaryEmitter }) => {
   const [visible, setVisible] = useState(false);
   const [professionalSummary, setUpdatedSummary] = useState(summary);
   const [hoveredItem, setHoveredItem] = useState(false);
+  const op = useRef(null);
 
   const onSummaryChanges = (e) => {
     setUpdatedSummary(e.target.value);
@@ -21,6 +23,25 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
   const handleReset = () => {
     setUpdatedSummary(summary);
   };
+
+  const headerElement = (
+    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+      <span>Professional Summary</span>
+      <i
+        className="pi pi-info-circle"
+        onClick={(e) => op.current.toggle(e)}
+        style={{
+          fontSize: "25px",
+          color: "orange",
+          cursor: "pointer",
+          alignSelf: "flex-start",
+        }}
+      ></i>
+      <OverlayPanel ref={op}>
+        <div>original text here</div>
+      </OverlayPanel>
+    </div>
+  );
 
   return (
     <>
@@ -82,7 +103,7 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
           </div>
         </div>
         <Dialog
-          header="Professional Summary"
+          header={headerElement}
           visible={visible}
           style={{ width: "50vw" }}
           onHide={() => {
@@ -96,22 +117,20 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
               paddingTop: "0",
             }}
           >
-            <div>
-              <InputTextarea
-                rows={10}
-                autoResize="false"
-                name="summary"
-                value={professionalSummary}
-                onChange={onSummaryChanges}
-                placeholder="professional Summary"
-                style={{
-                  resize: "none",
-                  textAlign: "justify",
-                  width: "100%",
-                  marginTop: "1rem",
-                }}
-              />
-            </div>
+            <InputTextarea
+              rows={10}
+              autoResize="false"
+              name="summary"
+              value={professionalSummary}
+              onChange={onSummaryChanges}
+              placeholder="professional Summary"
+              style={{
+                resize: "none",
+                textAlign: "justify",
+                width: "100%",
+                marginTop: "1rem",
+              }}
+            />
             <div style={{ marginTop: "1rem" }}>
               <Button
                 label="Save"
