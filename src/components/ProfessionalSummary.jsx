@@ -27,7 +27,7 @@ const ProfessionalSummary = ({ summary, summaryEmitter, originalSummary }) => {
     <SeeOriginal
       data={originalSummary}
       title="Professional Summary"
-      width="50vw"
+      width="40vw"
     ></SeeOriginal>
   );
 

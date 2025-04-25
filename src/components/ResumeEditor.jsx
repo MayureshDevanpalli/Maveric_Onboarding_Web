@@ -118,6 +118,7 @@ const ResumeEditor = ({ data }) => {
       >
         <Header
           headers={schemaStructured.headers}
+          originalHeaders={data.headers}
           headersEmitter={onHeaderChanges}
         ></Header>
         <ProfessionalSummary
@@ -133,6 +134,7 @@ const ResumeEditor = ({ data }) => {
         <Awards
           awards={schemaStructured.awards}
           awardsEmitter={onAwardsChanges}
+          originalAwards={data.awards}
         ></Awards>
         <CertificationsAndCourses
           certs={schemaStructured.certifications}

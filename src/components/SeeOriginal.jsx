@@ -27,10 +27,31 @@ const SeeOriginal = ({ data, title, width }) => {
         <OverlayPanel ref={op} style={{ width: width }}>
           {(() => {
             switch (title) {
+              case "Headers":
+                return (
+                  <div style={{ display: "flex", gap: "2rem" }}>
+                    <div>
+                      <div style={{ fontWeight: "bold" }}>Candidate Name:</div>
+                      <div>{data.candidateName}</div>
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: "bold" }}>
+                        Candidate Position:
+                      </div>
+                      <div>{data.candidatePosition}</div>
+                    </div>
+                  </div>
+                );
               case "Professional Summary":
                 return <div>{data}</div>;
-              case "Awards & Recognition":
-                return <div>{data}</div>;
+              case "Awards & Recognitions":
+                return (
+                  <ul>
+                    {data.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                );
               case "Certifications and Courses":
                 return <div>{data}</div>;
               case "Project Experience":
