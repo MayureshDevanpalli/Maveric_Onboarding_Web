@@ -1,5 +1,5 @@
 import { Button } from "primereact/button";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "primeicons/primeicons.css";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -10,21 +10,41 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
   const [hoveredItem, setHoveredItem] = useState(false);
   const [hoveredDialogItem, setHoveredDialogItem] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [DialogVisible, setDialogVisible] = useState(false);
+  const [dialogVisible, setDialogVisible] = useState(false);
   const [projectExperience, setProjectExperience] = useState(projects);
+  const projectExperienceListRef = useRef(null);
+  const [projectResponsibility, setProjectResponsibility] = useState(null)
+  const [selectedResponsibility, setSelectedResponsibility] = useState([]);
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState(null)
+  const [savedProjectExperience, setSavedProjectExperience] = useState(
+    projects.map((p) => ({ ...p, responsibilities: [...p.responsibilities] }))
+  );
 
   const handleEditClick = () => {
     setVisible(true);
   };
-  const handleDialogEditClick = () => {
-    setDialogVisible(true);
-  };
+
+  const handleDialogEditClick = (index) =>{
+    setSelectedProjectIndex(index);
+    setProjectResponsibility([...projectExperience[index].responsibilities]);    
+    setDialogVisible(true)
+  }
 
   const handleReset = () => {
-    setProjectExperience(projects.map((p) => ({ ...p })));
+    const reset = savedProjectExperience.map((p) => ({
+      ...p,
+      responsibilities: [...p.responsibilities],
+    }));
+    setProjectExperience(reset);
   };
 
   const handleSave = () => {
+    const updatedProjects = projectExperience.map((p) => ({
+      ...p,
+      responsibilities: [...p.responsibilities],
+    }));
+    setSavedProjectExperience(updatedProjects);
+    
     setProjectExperience(projectExperience);
     projectEmitter(projectExperience);
     setVisible(false);
@@ -34,6 +54,57 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
     const updated = [...projectExperience];
     updated[index][field] = value;
     setProjectExperience(updated);
+  };
+
+  const onResponsibilityChanges = (e) => {
+    const index = parseInt(e.target.name, 10);
+    const updatedExperience = [...projectResponsibility];
+    updatedExperience[index] = e.target.value;
+    setProjectResponsibility(updatedExperience);
+  };
+
+  const toggleCheckbox = (index) => {
+    const updatedSelections = [...selectedResponsibility];
+    updatedSelections[index] = !updatedSelections[index];
+    setSelectedResponsibility(updatedSelections);
+  };
+
+  const handleDialogSave = () => {
+    const filteredExperience = projectResponsibility?.filter(
+      (exp) => exp.trim() !== ""
+    );
+
+  const updatedProjectExperience = [...projectExperience];
+    updatedProjectExperience[selectedProjectIndex] = {
+      ...updatedProjectExperience[selectedProjectIndex],
+      responsibilities: filteredExperience,
+    };
+    setProjectExperience(updatedProjectExperience);
+    projectEmitter(updatedProjectExperience);
+    setDialogVisible(false);
+  };
+
+  const handleDialogReset = () => {
+    setProjectResponsibility([...projectExperience[selectedProjectIndex].responsibilities]);
+  };
+
+  const handleAddProjectResponsibility = () => {
+    setProjectResponsibility([...projectResponsibility, ""]);
+    setTimeout(() => {
+      if (projectExperienceListRef.current) {
+        projectExperienceListRef.current.scrollTop =
+          projectExperienceListRef.current.scrollHeight;
+      }
+    }, 0);
+  };
+
+  const handleDeleteSelected = () => {
+    const newResponsibilities = projectResponsibility.filter(
+      (_, index) => !selectedResponsibility[index]
+    );
+    const newSelections = selectedResponsibility.filter((selected) => !selected);
+    setProjectResponsibility(newResponsibilities);
+    setSelectedResponsibility(newSelections);
   };
 
   return (
@@ -390,7 +461,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                               {hoveredDialogItem && (
                                 <i
                                   className="pi pi-pencil"
-                                  onClick={handleDialogEditClick}
+                                  onClick={() => handleDialogEditClick(index)}
                                   style={{
                                     fontSize: "1.05rem",
                                     color: "gray",
@@ -401,7 +472,6 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                 ></i>
                               )}
                             </div>
-
                             <ul>
                               {exp.responsibilities?.map(
                                 (skill, skillIndex) => (
@@ -447,11 +517,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
 
         <Dialog
           header="Responsibility"
-          visible={DialogVisible}
+          visible={dialogVisible}
           style={{ width: "60vw", height: "80vh" }}
           onHide={() => {
-            if (!DialogVisible) return;
-            // handleReset();
+            if (!dialogVisible) return;
+            handleDialogReset();
             setDialogVisible(false);
           }}
         >
@@ -471,9 +541,9 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                 overflowY: "auto",
                 marginBottom: "1rem",
               }}
-              // ref={experienceListRef}
-            >
-              {projectExperience.map((skill, index) => (
+              ref={projectExperienceListRef}
+              >
+              {projectResponsibility?.map((skill, index) => (
                 <div
                   style={{
                     display: "flex",
@@ -484,9 +554,9 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                 >
                   <Checkbox
                     style={{ marginRight: "1rem" }}
-                    // checked={selectedExperiences[index] || false}
-                    // onChange={() => toggleCheckbox(index)}
-                  ></Checkbox>
+                    checked={selectedResponsibility[index] || false}
+                    onChange={() => toggleCheckbox(index)}
+                  />
                   <InputTextarea
                     key={index}
                     rows={2}
@@ -494,7 +564,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                     name={index}
                     autoResize="false"
                     value={skill}
-                    // onChange={onExperienceChanges}
+                    onChange={onResponsibilityChanges}
                     style={{ resize: "none" }}
                   />
                 </div>
@@ -518,7 +588,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                     color: "#c2257c",
                     marginRight: "1rem",
                   }}
-                  // onClick={handleSave}
+                  onClick={handleDialogSave}
                 />
                 <Button
                   label="Reset"
@@ -530,12 +600,12 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                     color: "#1a4879",
                     marginRight: "1rem",
                   }}
-                  // onClick={handleReset}
+                  onClick={handleDialogReset}
                 />
               </div>
               <div>
                 <Button
-                  label="Add Experience"
+                  label="Add Responsibility"
                   outlined
                   style={{
                     width: "200px",
@@ -545,10 +615,10 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                     color: "white",
                     marginRight: "1rem",
                   }}
-                  // onClick={handleAddExperience}
+                  onClick={()=>handleAddProjectResponsibility()}
                 />
                 <Button
-                  // disabled={selectedExperiences.length === 0}
+                  disabled={selectedResponsibility.length === 0}
                   label="Delete Selected"
                   style={{
                     width: "180px",
@@ -557,7 +627,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                     background: "#f55442",
                     color: "white",
                   }}
-                  // onClick={handleDeleteSelected}
+                  onClick={handleDeleteSelected}
                 />
               </div>
             </div>
