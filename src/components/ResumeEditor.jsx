@@ -122,10 +122,12 @@ const ResumeEditor = ({ data }) => {
         ></Header>}
         {schemaStructured.professionalSummary && <ProfessionalSummary
           summary={schemaStructured.professionalSummary}
+          originalSummary={data.professionalSummary}
           summaryEmitter={onSummaryChanges}
         ></ProfessionalSummary>}
         {schemaStructured.professionalExperience && schemaStructured.professionalExperience.length !== 0 && <ProfessionalExperience
           experience={schemaStructured.professionalExperience}
+          originalExperience={data.professionalExperience}
           experienceEmitter={onExperienceChanges}
         ></ProfessionalExperience>}
         {schemaStructured.awards && schemaStructured.awards.length !== 0 && <Awards
@@ -146,6 +148,7 @@ const ResumeEditor = ({ data }) => {
         ></Credits>}
         {schemaStructured.projectExperience && schemaStructured.projectExperience.length !== 0 && <ProjectExperience
           projects={schemaStructured.projectExperience}
+          originalProjects={data.projectExperience}
           projectEmitter={onProjectChanges}
         ></ProjectExperience>}
         <Button

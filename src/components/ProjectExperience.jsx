@@ -5,21 +5,21 @@ import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
 import { Checkbox } from "primereact/checkbox";
+import SeeOriginal from "./SeeOriginal";
 
-const ProjectExperience = ({ projects, projectEmitter }) => {
+const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const [hoveredItem, setHoveredItem] = useState(false);
   const [hoveredDialogItem, setHoveredDialogItem] = useState(false);
   const [visible, setVisible] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [projectExperience, setProjectExperience] = useState(projects);
   const projectExperienceListRef = useRef(null);
-  const [projectResponsibility, setProjectResponsibility] = useState(null)
+  const [projectResponsibility, setProjectResponsibility] = useState(null);
   const [selectedResponsibility, setSelectedResponsibility] = useState([]);
-  const [selectedProjectIndex, setSelectedProjectIndex] = useState(null)
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
   const [savedProjectExperience, setSavedProjectExperience] = useState(
     projects.map((p) => ({ ...p, responsibilities: [...p.responsibilities] }))
   );
-
 
   const handleEditClick = () => {
     setVisible(true);
@@ -45,7 +45,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
       responsibilities: [...p.responsibilities],
     }));
     setSavedProjectExperience(updatedProjects);
-    
+
     setProjectExperience(projectExperience);
     projectEmitter(projectExperience);
     setVisible(false);
@@ -80,15 +80,16 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
       ...updatedProjectExperience[selectedProjectIndex],
       responsibilities: filteredExperience,
     };
-
     setProjectExperience(updatedProjectExperience);
     projectEmitter(updatedProjectExperience);
     setDialogVisible(false);
   };
 
   const handleDialogReset = () => {
-    setProjectResponsibility([...projectExperience[selectedProjectIndex].responsibilities]);
-  }
+    setProjectResponsibility([
+      ...projectExperience[selectedProjectIndex].responsibilities,
+    ]);
+  };
 
   const handleAddProjectResponsibility = () => {
     setProjectResponsibility([...projectResponsibility, ""]);
@@ -100,15 +101,24 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
     }, 0);
   };
 
-  
   const handleDeleteSelected = () => {
     const newResponsibilities = projectResponsibility.filter(
       (_, index) => !selectedResponsibility[index]
     );
-    const newSelections = selectedResponsibility.filter((selected) => !selected);
+    const newSelections = selectedResponsibility.filter(
+      (selected) => !selected
+    );
     setProjectResponsibility(newResponsibilities);
     setSelectedResponsibility(newSelections);
   };
+
+  const headerElement = (
+    <SeeOriginal
+      data={originalProjects}
+      title="Project Experience"
+      width="85vw"
+    ></SeeOriginal>
+  );
 
   return (
     <>
@@ -240,7 +250,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
         </div>
         <Dialog
           draggable={false}
-          header="Project Experience"
+          header={headerElement}
           visible={visible}
           style={{ width: "85vw", height: "90vh" }}
           onHide={() => {
@@ -545,7 +555,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                 marginBottom: "1rem",
               }}
               ref={projectExperienceListRef}
-              >
+            >
               {projectResponsibility?.map((skill, index) => (
                 <div
                   style={{
@@ -618,7 +628,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                     color: "white",
                     marginRight: "1rem",
                   }}
-                  onClick={()=>handleAddProjectResponsibility()}
+                  onClick={() => handleAddProjectResponsibility()}
                 />
                 <Button
                   disabled={selectedResponsibility.length === 0}

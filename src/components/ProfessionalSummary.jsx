@@ -1,15 +1,14 @@
 import { Button } from "primereact/button";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
-import { OverlayPanel } from "primereact/overlaypanel";
 import "primeicons/primeicons.css";
+import SeeOriginal from "./SeeOriginal";
 
-const ProfessionalSummary = ({ summary, summaryEmitter }) => {
+const ProfessionalSummary = ({ summary, summaryEmitter, originalSummary }) => {
   const [visible, setVisible] = useState(false);
   const [professionalSummary, setUpdatedSummary] = useState(summary);
   const [hoveredItem, setHoveredItem] = useState(false);
-  const op = useRef(null);
 
   const onSummaryChanges = (e) => {
     setUpdatedSummary(e.target.value);
@@ -25,22 +24,11 @@ const ProfessionalSummary = ({ summary, summaryEmitter }) => {
   };
 
   const headerElement = (
-    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-      <span>Professional Summary</span>
-      <i
-        className="pi pi-info-circle"
-        onClick={(e) => op.current.toggle(e)}
-        style={{
-          fontSize: "25px",
-          color: "orange",
-          cursor: "pointer",
-          alignSelf: "flex-start",
-        }}
-      ></i>
-      <OverlayPanel ref={op}>
-        <div>original text here</div>
-      </OverlayPanel>
-    </div>
+    <SeeOriginal
+      data={originalSummary}
+      title="Professional Summary"
+      width="50vw"
+    ></SeeOriginal>
   );
 
   return (
