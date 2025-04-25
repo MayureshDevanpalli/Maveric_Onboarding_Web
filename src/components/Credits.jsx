@@ -3,8 +3,10 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import "primeicons/primeicons.css";
+import SeeOriginal from "./SeeOriginal";
+import "../App.css";
 
-const Credits = ({ creditMap, creditEmitter }) => {
+const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
   const [hoveredItem, setHoveredItem] = useState(false);
   const [credits, setCredits] = useState(creditMap);
   const [visible, setVisible] = useState(false);
@@ -36,6 +38,14 @@ const Credits = ({ creditMap, creditEmitter }) => {
   const handleReset = () => {
     setEditedValues(credits.map((credit) => credit.items.join(", ")));
   };
+
+  const headerElement = (
+    <SeeOriginal
+      data={originalCredits}
+      title="Credits"
+      width="60vw"
+    ></SeeOriginal>
+  );
 
   return (
     <>
@@ -125,7 +135,7 @@ const Credits = ({ creditMap, creditEmitter }) => {
         </div>
         <Dialog
           draggable={false}
-          header="Credits"
+          header={headerElement}
           visible={visible}
           style={{ width: "60vw", height: "80vh" }}
           onHide={() => {
@@ -144,7 +154,7 @@ const Credits = ({ creditMap, creditEmitter }) => {
               height: "99%",
             }}
           >
-            <div>
+            <div style={{ width: "98%", height: "650px", overflowY: "auto" }}>
               <table
                 className="table table-bordered"
                 style={{ borderColor: "black" }}
@@ -180,8 +190,6 @@ const Credits = ({ creditMap, creditEmitter }) => {
                             border: "none",
                             borderRadius: 0,
                             width: "100%",
-                            maxHeight: "5rem",
-                            overflowY: "auto",
                           }}
                         />
                       </td>
@@ -190,7 +198,7 @@ const Credits = ({ creditMap, creditEmitter }) => {
                 </tbody>
               </table>
             </div>
-            <div style={{ marginTop: "1rem", paddingBottom: "2rem" }}>
+            <div style={{ marginTop: "1rem" }}>
               <Button
                 label="Save"
                 outlined

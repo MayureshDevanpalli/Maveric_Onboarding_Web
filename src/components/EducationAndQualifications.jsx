@@ -4,8 +4,13 @@ import "primeicons/primeicons.css";
 import { Checkbox } from "primereact/checkbox";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dialog } from "primereact/dialog";
+import SeeOriginal from "./SeeOriginal";
 
-const EducationAndQualifications = ({ eduList, eduListEmitter }) => {
+const EducationAndQualifications = ({
+  eduList,
+  eduListEmitter,
+  originalEduList,
+}) => {
   const [education, setEducation] = useState(eduList);
   const [visible, setVisible] = useState(false);
   const [selectedEduList, setSelectedEduList] = useState([]);
@@ -54,6 +59,14 @@ const EducationAndQualifications = ({ eduList, eduListEmitter }) => {
     setEducation(newExperiences);
     setSelectedEduList(newSelections);
   };
+
+  const headerElement = (
+    <SeeOriginal
+      data={originalEduList}
+      title="Educational Qualification"
+      width="50vw"
+    ></SeeOriginal>
+  );
 
   return (
     <>
@@ -121,7 +134,7 @@ const EducationAndQualifications = ({ eduList, eduListEmitter }) => {
       </div>
       <Dialog
         draggable={false}
-        header="Professional Experience"
+        header={headerElement}
         visible={visible}
         style={{ width: "60vw", height: "80vh" }}
         onHide={() => {

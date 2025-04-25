@@ -133,20 +133,23 @@ const ResumeEditor = ({ data }) => {
         ></ProfessionalExperience>
         <Awards
           awards={schemaStructured.awards}
-          awardsEmitter={onAwardsChanges}
           originalAwards={data.awards}
+          awardsEmitter={onAwardsChanges}
         ></Awards>
         <CertificationsAndCourses
           certs={schemaStructured.certifications}
+          originalCertifications={data.certifications}
           certEmitter={onCertsChanges}
         ></CertificationsAndCourses>
         <EducationAndQualifications
           eduList={schemaStructured.education}
           eduListEmitter={onEduListChanges}
+          originalEduList={data.education}
         ></EducationAndQualifications>
         <Credits
           creditMap={schemaStructured.credits}
           creditEmitter={onCreditsChanges}
+          originalCredits={data.credits}
         ></Credits>
         <ProjectExperience
           projects={schemaStructured.projectExperience}

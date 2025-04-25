@@ -269,7 +269,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
               height: "99%",
             }}
           >
-            <div style={{ width: "98%", height: "500px", overflowY: "auto" }}>
+            <div style={{ overflowY: "auto" }}>
               <table
                 className="table table-bordered"
                 style={{ borderColor: "black" }}
