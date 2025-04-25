@@ -190,7 +190,7 @@ const Credits = ({ creditMap, creditEmitter }) => {
                 </tbody>
               </table>
             </div>
-            <div style={{ marginTop: "1rem" }}>
+            <div style={{ marginTop: "1rem", paddingBottom: "2rem" }}>
               <Button
                 label="Save"
                 outlined

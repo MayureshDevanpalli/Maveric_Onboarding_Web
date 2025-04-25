@@ -122,10 +122,12 @@ const ResumeEditor = ({ data }) => {
         ></Header>
         <ProfessionalSummary
           summary={schemaStructured.professionalSummary}
+          originalSummary={data.professionalSummary}
           summaryEmitter={onSummaryChanges}
         ></ProfessionalSummary>
         <ProfessionalExperience
           experience={schemaStructured.professionalExperience}
+          originalExperience={data.professionalExperience}
           experienceEmitter={onExperienceChanges}
         ></ProfessionalExperience>
         <Awards
@@ -146,6 +148,7 @@ const ResumeEditor = ({ data }) => {
         ></Credits>
         <ProjectExperience
           projects={schemaStructured.projectExperience}
+          originalProjects={data.projectExperience}
           projectEmitter={onProjectChanges}
         ></ProjectExperience>
         <Button

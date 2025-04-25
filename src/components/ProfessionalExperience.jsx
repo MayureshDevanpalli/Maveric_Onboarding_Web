@@ -4,8 +4,13 @@ import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import "primeicons/primeicons.css";
 import { Checkbox } from "primereact/checkbox";
+import SeeOriginal from "./SeeOriginal";
 
-const ProfessionalExperience = ({ experience, experienceEmitter }) => {
+const ProfessionalExperience = ({
+  experience,
+  experienceEmitter,
+  originalExperience,
+}) => {
   const [visible, setVisible] = useState(false);
   const [professionalExperience, setProfessionalExperience] =
     useState(experience);
@@ -57,6 +62,14 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
     setProfessionalExperience(newExperiences);
     setSelectedExperiences(newSelections);
   };
+
+  const headerElement = (
+    <SeeOriginal
+      data={originalExperience}
+      title="Professional Experience"
+      width="60vw"
+    ></SeeOriginal>
+  );
 
   return (
     <>
@@ -124,7 +137,7 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
         </div>
         <Dialog
           draggable={false}
-          header="Professional Experience"
+          header={headerElement}
           visible={visible}
           style={{ width: "60vw", height: "80vh" }}
           onHide={() => {
