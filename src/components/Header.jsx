@@ -107,6 +107,7 @@ const Header = ({ headers, headersEmitter }) => {
           </div>
         </div>
         <Dialog
+          draggable={false}
           header="Header"
           visible={visible}
           style={{ width: "50dvw" }}

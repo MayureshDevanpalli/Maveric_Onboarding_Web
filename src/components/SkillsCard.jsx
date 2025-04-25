@@ -59,6 +59,8 @@ const SkillsCard = ({ requiredSkills, matchedSkills }) => {
         <div
           style={{
             width: "20vw",
+            height: "35vh",
+            overflowY: "auto",
           }}
         >
           <h6
@@ -79,7 +81,7 @@ const SkillsCard = ({ requiredSkills, matchedSkills }) => {
           )}
         </div>
         <Divider layout="vertical" />
-        <div style={{ width: "20vw" }}>
+        <div style={{ width: "20vw", height: "35vh", overflowY: "auto" }}>
           <h6
             style={{
               display: "flex",
@@ -103,7 +105,7 @@ const SkillsCard = ({ requiredSkills, matchedSkills }) => {
           )}
         </div>
         <Divider layout="vertical" />
-        <div style={{ width: "20vw" }}>
+        <div style={{ width: "20vw", height: "35vh", overflowY: "auto" }}>
           <h6 style={{ display: "flex", justifyContent: "center" }}>
             Missing Skills
           </h6>

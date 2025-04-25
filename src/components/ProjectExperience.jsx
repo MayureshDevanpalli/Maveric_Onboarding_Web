@@ -20,7 +20,6 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
     projects.map((p) => ({ ...p, responsibilities: [...p.responsibilities] }))
   );
 
-
   const handleEditClick = () => {
     setVisible(true);
   };
@@ -75,12 +74,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
       (exp) => exp.trim() !== ""
     );
 
-    const updatedProjectExperience = [...projectExperience];
+  const updatedProjectExperience = [...projectExperience];
     updatedProjectExperience[selectedProjectIndex] = {
       ...updatedProjectExperience[selectedProjectIndex],
       responsibilities: filteredExperience,
     };
-
     setProjectExperience(updatedProjectExperience);
     projectEmitter(updatedProjectExperience);
     setDialogVisible(false);
@@ -88,7 +86,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
 
   const handleDialogReset = () => {
     setProjectResponsibility([...projectExperience[selectedProjectIndex].responsibilities]);
-  }
+  };
 
   const handleAddProjectResponsibility = () => {
     setProjectResponsibility([...projectResponsibility, ""]);
@@ -100,7 +98,6 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
     }, 0);
   };
 
-  
   const handleDeleteSelected = () => {
     const newResponsibilities = projectResponsibility.filter(
       (_, index) => !selectedResponsibility[index]
@@ -239,6 +236,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
           </div>
         </div>
         <Dialog
+          draggable={false}
           header="Project Experience"
           visible={visible}
           style={{ width: "85vw", height: "90vh" }}
@@ -289,7 +287,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                       index
                                     )
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -309,7 +311,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                       index
                                     )
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -329,7 +335,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                       index
                                     )
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -345,7 +355,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                   onChange={(e) =>
                                     handleChange(e.target.value, "role", index)
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -365,7 +379,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                       index
                                     )
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -381,7 +399,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                   onChange={(e) =>
                                     handleChange(e.target.value, "tools", index)
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -423,13 +445,16 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                           </div>
                           <div
                             onMouseEnter={() => setHoveredDialogItem(true)}
-                            onMouseLeave={() => setHoveredDialogItem(false)}>
-                            <div style={{
-                              display: "flex",
-                              flexDirection: "row",
-                              alignItems: "flex-start",
-                              width: "100%",
-                            }}>
+                            onMouseLeave={() => setHoveredDialogItem(false)}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "flex-start",
+                                width: "100%",
+                              }}
+                            >
                               <div style={{ fontWeight: "bold" }}>
                                 Responsibilities:
                               </div>
@@ -448,9 +473,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                               )}
                             </div>
                             <ul>
-                              {exp.responsibilities?.map((skill, skillIndex) => (
-                                <li key={skillIndex}>{skill}</li>
-                              ))}
+                              {exp.responsibilities?.map(
+                                (skill, skillIndex) => (
+                                  <li key={skillIndex}>{skill}</li>
+                                )
+                              )}
                             </ul>
                           </div>
                         </div>
