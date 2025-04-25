@@ -116,38 +116,38 @@ const ResumeEditor = ({ data }) => {
           color: "black",
         }}
       >
-        <Header
+        {schemaStructured.headers && <Header
           headers={schemaStructured.headers}
           headersEmitter={onHeaderChanges}
-        ></Header>
-        <ProfessionalSummary
+        ></Header>}
+        {schemaStructured.professionalSummary && <ProfessionalSummary
           summary={schemaStructured.professionalSummary}
           summaryEmitter={onSummaryChanges}
-        ></ProfessionalSummary>
-        <ProfessionalExperience
+        ></ProfessionalSummary>}
+        {schemaStructured.professionalExperience && schemaStructured.professionalExperience.length !== 0 && <ProfessionalExperience
           experience={schemaStructured.professionalExperience}
           experienceEmitter={onExperienceChanges}
-        ></ProfessionalExperience>
-        <Awards
+        ></ProfessionalExperience>}
+        {schemaStructured.awards && schemaStructured.awards.length !== 0 && <Awards
           awards={schemaStructured.awards}
           awardsEmitter={onAwardsChanges}
-        ></Awards>
-        <CertificationsAndCourses
+        ></Awards>}
+        {schemaStructured.certifications && schemaStructured.certifications.length !== 0 && <CertificationsAndCourses
           certs={schemaStructured.certifications}
           certEmitter={onCertsChanges}
-        ></CertificationsAndCourses>
-        <EducationAndQualifications
+        ></CertificationsAndCourses>}
+        {schemaStructured.education && schemaStructured.education.length !== 0 && <EducationAndQualifications
           eduList={schemaStructured.education}
           eduListEmitter={onEduListChanges}
-        ></EducationAndQualifications>
-        <Credits
+        ></EducationAndQualifications>}
+        {schemaStructured.credits && schemaStructured.credits.length !== 0 && <Credits
           creditMap={schemaStructured.credits}
           creditEmitter={onCreditsChanges}
-        ></Credits>
-        <ProjectExperience
+        ></Credits>}
+        {schemaStructured.projectExperience && schemaStructured.projectExperience.length !== 0 && <ProjectExperience
           projects={schemaStructured.projectExperience}
           projectEmitter={onProjectChanges}
-        ></ProjectExperience>
+        ></ProjectExperience>}
         <Button
           onClick={downloadResume}
           label="Download Resume"
