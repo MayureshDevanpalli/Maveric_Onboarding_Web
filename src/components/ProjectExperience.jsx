@@ -18,18 +18,18 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const [selectedResponsibility, setSelectedResponsibility] = useState([]);
   const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
   const [savedProjectExperience, setSavedProjectExperience] = useState(
-    projects.map((p) => ({ ...p, responsibilities: [...p.responsibilities] }))
+    projects.map((p) => ({ ...p, responsibilities: [(p.responsibilities || [])] }))
   );
 
   const handleEditClick = () => {
     setVisible(true);
   };
 
-  const handleDialogEditClick = (index) =>{
+  const handleDialogEditClick = (index) => {
     setSelectedProjectIndex(index);
     setProjectResponsibility([...projectExperience[index].responsibilities]);    
-    setDialogVisible(true)
-  }
+    setDialogVisible(true);
+  };
 
   const handleReset = () => {
     const reset = savedProjectExperience.map((p) => ({
