@@ -124,6 +124,7 @@ const Credits = ({ creditMap, creditEmitter }) => {
           </div>
         </div>
         <Dialog
+          draggable={false}
           header="Credits"
           visible={visible}
           style={{ width: "60vw", height: "80vh" }}

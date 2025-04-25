@@ -1,61 +1,57 @@
 import { Button } from "primereact/button";
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
+import "primeicons/primeicons.css";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
-import "primeicons/primeicons.css";
 import { Checkbox } from "primereact/checkbox";
 
-const ProfessionalExperience = ({ experience, experienceEmitter }) => {
+const Awards = ({ awards, awardsEmitter }) => {
   const [visible, setVisible] = useState(false);
-  const [professionalExperience, setProfessionalExperience] =
-    useState(experience);
-  const [selectedExperiences, setSelectedExperiences] = useState([]);
+  const [updatedAwards, setUpdatedAwards] = useState(awards);
+  const [selectedAwards, setSelectedAwards] = useState([]);
   const [hoveredItem, setHoveredItem] = useState(false);
-  const experienceListRef = useRef(null);
+  const awardsListRef = useRef(null);
 
   const handleSave = () => {
-    const filteredExperience = professionalExperience.filter(
-      (exp) => exp.trim() !== ""
-    );
-    setProfessionalExperience(filteredExperience);
-    experienceEmitter(professionalExperience);
+    const filteredAwards = updatedAwards.filter((exp) => exp.trim() !== "");
+    setUpdatedAwards(filteredAwards);
+    awardsEmitter(updatedAwards);
     setVisible(false);
   };
 
   const onExperienceChanges = (e) => {
     const index = parseInt(e.target.name, 10);
-    const updatedExperience = [...professionalExperience];
-    updatedExperience[index] = e.target.value;
-    setProfessionalExperience(updatedExperience);
+    const tempAwards = [...updatedAwards];
+    tempAwards[index] = e.target.value;
+    setUpdatedAwards(tempAwards);
   };
 
   const handleReset = () => {
-    setProfessionalExperience(experience);
+    setUpdatedAwards(awards);
   };
 
   const handleAddExperience = () => {
-    setProfessionalExperience([...professionalExperience, ""]);
+    setUpdatedAwards([...updatedAwards, ""]);
     setTimeout(() => {
-      if (experienceListRef.current) {
-        experienceListRef.current.scrollTop =
-          experienceListRef.current.scrollHeight;
+      if (awardsListRef.current) {
+        awardsListRef.current.scrollTop = awardsListRef.current.scrollHeight;
       }
     }, 0);
   };
 
   const toggleCheckbox = (index) => {
-    const updatedSelections = [...selectedExperiences];
+    const updatedSelections = [...selectedAwards];
     updatedSelections[index] = !updatedSelections[index];
-    setSelectedExperiences(updatedSelections);
+    setSelectedAwards(updatedSelections);
   };
 
   const handleDeleteSelected = () => {
-    const newExperiences = professionalExperience.filter(
-      (_, index) => !selectedExperiences[index]
+    const newExperiences = updatedAwards.filter(
+      (_, index) => !selectedAwards[index]
     );
-    const newSelections = selectedExperiences.filter((selected) => !selected);
-    setProfessionalExperience(newExperiences);
-    setSelectedExperiences(newSelections);
+    const newSelections = selectedAwards.filter((selected) => !selected);
+    setUpdatedAwards(newExperiences);
+    setSelectedAwards(newSelections);
   };
 
   return (
@@ -80,7 +76,7 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
               fontWeight: "bold",
             }}
           >
-            Professional Experience
+            Awards & Recognitions
           </div>
           <div
             style={{
@@ -94,8 +90,8 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
           >
             <div style={{ width: "98%", opacity: 0.8, fontSize: "1rem" }}>
               <ul>
-                {professionalExperience.map((skill, index) => (
-                  <li key={index}>{skill}</li>
+                {updatedAwards.map((item, index) => (
+                  <li key={index}>{item}</li>
                 ))}
               </ul>
             </div>
@@ -149,9 +145,9 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
                 overflowY: "auto",
                 marginBottom: "1rem",
               }}
-              ref={experienceListRef}
+              ref={awardsListRef}
             >
-              {professionalExperience.map((skill, index) => (
+              {updatedAwards.map((skill, index) => (
                 <div
                   style={{
                     display: "flex",
@@ -162,7 +158,7 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
                 >
                   <Checkbox
                     style={{ marginRight: "1rem" }}
-                    checked={selectedExperiences[index] || false}
+                    checked={selectedAwards[index] || false}
                     onChange={() => toggleCheckbox(index)}
                   ></Checkbox>
                   <InputTextarea
@@ -226,7 +222,7 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
                   onClick={handleAddExperience}
                 />
                 <Button
-                  disabled={selectedExperiences.length === 0}
+                  disabled={selectedAwards.length === 0}
                   label="Delete Selected"
                   style={{
                     width: "180px",
@@ -246,4 +242,4 @@ const ProfessionalExperience = ({ experience, experienceEmitter }) => {
   );
 };
 
-export default ProfessionalExperience;
+export default Awards;

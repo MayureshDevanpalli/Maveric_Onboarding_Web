@@ -239,6 +239,7 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
           </div>
         </div>
         <Dialog
+          draggable={false}
           header="Project Experience"
           visible={visible}
           style={{ width: "85vw", height: "90vh" }}
@@ -289,7 +290,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                       index
                                     )
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -309,7 +314,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                       index
                                     )
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -329,7 +338,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                       index
                                     )
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -345,7 +358,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                   onChange={(e) =>
                                     handleChange(e.target.value, "role", index)
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -365,7 +382,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                       index
                                     )
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -381,7 +402,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                                   onChange={(e) =>
                                     handleChange(e.target.value, "tools", index)
                                   }
-                                  style={{height: 30, width: "100%", borderRadius: 0 }}
+                                  style={{
+                                    height: 30,
+                                    width: "100%",
+                                    borderRadius: 0,
+                                  }}
                                 />
                               </td>
                             </tr>
@@ -423,13 +448,16 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                           </div>
                           <div
                             onMouseEnter={() => setHoveredDialogItem(true)}
-                            onMouseLeave={() => setHoveredDialogItem(false)}>
-                            <div style={{
-                              display: "flex",
-                              flexDirection: "row",
-                              alignItems: "flex-start",
-                              width: "100%",
-                            }}>
+                            onMouseLeave={() => setHoveredDialogItem(false)}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "flex-start",
+                                width: "100%",
+                              }}
+                            >
                               <div style={{ fontWeight: "bold" }}>
                                 Responsibilities:
                               </div>
@@ -448,9 +476,11 @@ const ProjectExperience = ({ projects, projectEmitter }) => {
                               )}
                             </div>
                             <ul>
-                              {exp.responsibilities?.map((skill, skillIndex) => (
-                                <li key={skillIndex}>{skill}</li>
-                              ))}
+                              {exp.responsibilities?.map(
+                                (skill, skillIndex) => (
+                                  <li key={skillIndex}>{skill}</li>
+                                )
+                              )}
                             </ul>
                           </div>
                         </div>

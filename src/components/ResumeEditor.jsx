@@ -7,6 +7,7 @@ import ProfessionalExperience from "./ProfessionalExperience";
 import CertificationsAndCourses from "./CertificationsAndCourses";
 import EducationAndQualifications from "./EducationAndQualifications";
 import Credits from "./Credits";
+import Awards from "./Awards";
 import ProjectExperience from "./ProjectExperience";
 import FullPageSpinner from "./FullPageSpinner";
 
@@ -95,6 +96,13 @@ const ResumeEditor = ({ data }) => {
     }));
   };
 
+  const onAwardsChanges = (updatedAwards) => {
+    setSchemaStructured((prevData) => ({
+      ...prevData,
+      awards: updatedAwards,
+    }));
+  };
+
   return (
     <>
       {loading && <FullPageSpinner />}
@@ -120,6 +128,10 @@ const ResumeEditor = ({ data }) => {
           experience={schemaStructured.professionalExperience}
           experienceEmitter={onExperienceChanges}
         ></ProfessionalExperience>
+        <Awards
+          awards={schemaStructured.awards}
+          awardsEmitter={onAwardsChanges}
+        ></Awards>
         <CertificationsAndCourses
           certs={schemaStructured.certifications}
           certEmitter={onCertsChanges}
