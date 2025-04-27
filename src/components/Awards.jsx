@@ -11,27 +11,30 @@ const Awards = ({ awards, awardsEmitter }) => {
   const [selectedAwards, setSelectedAwards] = useState([]);
   const [hoveredItem, setHoveredItem] = useState(false);
   const awardsListRef = useRef(null);
+  const [editableAward, setEditableAward] = useState([]);
+
 
   const handleSave = () => {
-    const filteredAwards = updatedAwards.filter((exp) => exp.trim() !== "");
+    const filteredAwards = editableAward.filter((exp) => exp.trim() !== "");
     setUpdatedAwards(filteredAwards);
-    awardsEmitter(updatedAwards);
+    awardsEmitter(filteredAwards);
     setVisible(false);
   };
 
-  const onExperienceChanges = (e) => {
+  const onAwardChanges = (e) => {
     const index = parseInt(e.target.name, 10);
-    const tempAwards = [...updatedAwards];
+    const tempAwards = [...editableAward];
     tempAwards[index] = e.target.value;
-    setUpdatedAwards(tempAwards);
+    setEditableAward(tempAwards);
   };
 
   const handleReset = () => {
-    setUpdatedAwards(awards);
+    setEditableAward([...updatedAwards]);
+    setSelectedAwards([]);
   };
 
-  const handleAddExperience = () => {
-    setUpdatedAwards([...updatedAwards, ""]);
+  const handleAddAwards = () => {
+    setEditableAward([...editableAward, ""]);
     setTimeout(() => {
       if (awardsListRef.current) {
         awardsListRef.current.scrollTop = awardsListRef.current.scrollHeight;
@@ -46,11 +49,12 @@ const Awards = ({ awards, awardsEmitter }) => {
   };
 
   const handleDeleteSelected = () => {
-    const newExperiences = updatedAwards.filter(
+    const newAwards = updatedAwards.filter(
       (_, index) => !selectedAwards[index]
     );
     const newSelections = selectedAwards.filter((selected) => !selected);
-    setUpdatedAwards(newExperiences);
+    setEditableAward(newAwards);
+    setUpdatedAwards(newAwards);
     setSelectedAwards(newSelections);
   };
 
@@ -106,7 +110,11 @@ const Awards = ({ awards, awardsEmitter }) => {
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
-                  onClick={() => setVisible(true)}
+                  onClick={() => {
+                    setEditableAward([...awards]);
+                    setSelectedAwards([]);
+                    setVisible(true);
+                  }}
                   style={{
                     fontSize: "1.1rem",
                     color: "gray",
@@ -120,7 +128,7 @@ const Awards = ({ awards, awardsEmitter }) => {
         </div>
         <Dialog
           draggable={false}
-          header="Professional Experience"
+          header="Awards & Recognitions"
           visible={visible}
           style={{ width: "60vw", height: "80vh" }}
           onHide={() => {
@@ -147,7 +155,7 @@ const Awards = ({ awards, awardsEmitter }) => {
               }}
               ref={awardsListRef}
             >
-              {updatedAwards.map((skill, index) => (
+              {editableAward.map((skill, index) => (
                 <div
                   style={{
                     display: "flex",
@@ -168,7 +176,7 @@ const Awards = ({ awards, awardsEmitter }) => {
                     name={index}
                     autoResize="false"
                     value={skill}
-                    onChange={onExperienceChanges}
+                    onChange={onAwardChanges}
                     style={{ resize: "none" }}
                   />
                 </div>
@@ -219,7 +227,7 @@ const Awards = ({ awards, awardsEmitter }) => {
                     color: "white",
                     marginRight: "1rem",
                   }}
-                  onClick={handleAddExperience}
+                  onClick={handleAddAwards}
                 />
                 <Button
                   disabled={selectedAwards.length === 0}
