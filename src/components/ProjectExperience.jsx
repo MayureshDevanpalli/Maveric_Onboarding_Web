@@ -18,7 +18,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const [selectedResponsibility, setSelectedResponsibility] = useState([]);
   const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
   const [savedProjectExperience, setSavedProjectExperience] = useState(
-    projects.map((p) => ({ ...p, responsibilities: [...p.responsibilities] }))
+    projects.map((p) => ({ ...p, responsibilities: [...(p.responsibilities || [])]}))
   );
 
   const handleEditClick = () => {

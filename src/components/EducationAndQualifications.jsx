@@ -16,28 +16,30 @@ const EducationAndQualifications = ({
   const [selectedEduList, setSelectedEduList] = useState([]);
   const [hoveredItem, setHoveredItem] = useState(false);
   const eduListRef = useRef(null);
+  const [editableEducation, setEditableEducation] = useState([]);
 
   const handleSave = () => {
-    setVisible(false);
-    const filteredCerts = education.filter((c) => c.trim() !== "");
+    // setVisible(false);
+    const filteredCerts = editableEducation.filter((c) => c.trim() !== "");
     setEducation(filteredCerts);
-    eduListEmitter(education);
+    eduListEmitter(filteredCerts);
     setVisible(false);
   };
 
-  const onCertChanges = (e) => {
+  const onEducationtChanges = (e) => {
     const index = parseInt(e.target.name, 10);
-    const updatedCerts = [...education];
-    updatedCerts[index] = e.target.value;
-    setEducation(updatedCerts);
+    const updatedEducation = [...editableEducation];
+    updatedEducation[index] = e.target.value;
+    setEditableEducation(updatedEducation);
   };
 
   const handleReset = () => {
-    setEducation(eduList);
+    setEditableEducation([...education]);
+    setSelectedEduList([]);
   };
 
-  const handleAddCert = () => {
-    setEducation([...education, ""]);
+  const handleAddEducation = () => {
+    setEditableEducation([...editableEducation, ""]);
     setTimeout(() => {
       if (eduListRef.current) {
         eduListRef.current.scrollTop = eduListRef.current.scrollHeight;
@@ -56,6 +58,7 @@ const EducationAndQualifications = ({
       (_, index) => !selectedEduList[index]
     );
     const newSelections = selectedEduList.filter((selected) => !selected);
+    setEditableEducation(newExperiences);
     setEducation(newExperiences);
     setSelectedEduList(newSelections);
   };
@@ -119,7 +122,10 @@ const EducationAndQualifications = ({
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
-                  onClick={() => setVisible(true)}
+                  onClick={() => {
+                    setEditableEducation([...education]);
+                    setSelectedEduList([]);
+                    setVisible(true)}}
                   style={{
                     fontSize: "1.1rem",
                     color: "gray",
@@ -161,7 +167,7 @@ const EducationAndQualifications = ({
             }}
             ref={eduListRef}
           >
-            {education.map((skill, index) => (
+            {editableEducation.map((skill, index) => (
               <div
                 style={{
                   display: "flex",
@@ -182,7 +188,7 @@ const EducationAndQualifications = ({
                   name={index}
                   autoResize="false"
                   value={skill}
-                  onChange={onCertChanges}
+                  onChange={onEducationtChanges}
                   style={{ resize: "none" }}
                 />
               </div>
@@ -233,7 +239,7 @@ const EducationAndQualifications = ({
                   color: "white",
                   marginRight: "1rem",
                 }}
-                onClick={handleAddCert}
+                onClick={handleAddEducation}
               />
               <Button
                 disabled={selectedEduList.length === 0}

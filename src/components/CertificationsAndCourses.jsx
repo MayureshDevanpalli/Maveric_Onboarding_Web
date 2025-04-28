@@ -16,28 +16,30 @@ const CertificationsAndCourses = ({
   const [selectedCerts, setSelectedCerts] = useState([]);
   const [hoveredItem, setHoveredItem] = useState(false);
   const certsListRef = useRef(null);
+  const [editableCertificates, setEditableCertificates] = useState([]);
 
   const handleSave = () => {
-    setVisible(false);
-    const filteredCerts = certificates.filter((c) => c.trim() !== "");
+    // setVisible(false);
+    const filteredCerts = editableCertificates.filter((c) => c.trim() !== "");
     setCertificates(filteredCerts);
-    certEmitter(certificates);
+    certEmitter(filteredCerts);
     setVisible(false);
   };
 
   const onCertChanges = (e) => {
     const index = parseInt(e.target.name, 10);
-    const updatedCerts = [...certificates];
+    const updatedCerts = [...editableCertificates];
     updatedCerts[index] = e.target.value;
-    setCertificates(updatedCerts);
+    setEditableCertificates(updatedCerts);
   };
 
   const handleReset = () => {
-    setCertificates(certs);
+    setEditableCertificates([...certificates]);
+    setSelectedCerts([]);
   };
 
   const handleAddCert = () => {
-    setCertificates([...certificates, ""]);
+    setEditableCertificates([...editableCertificates, ""]);
     setTimeout(() => {
       if (certsListRef.current) {
         certsListRef.current.scrollTop = certsListRef.current.scrollHeight;
@@ -56,6 +58,7 @@ const CertificationsAndCourses = ({
       (_, index) => !selectedCerts[index]
     );
     const newSelections = selectedCerts.filter((selected) => !selected);
+    setEditableCertificates(newExperiences);
     setCertificates(newExperiences);
     setSelectedCerts(newSelections);
   };
@@ -120,7 +123,10 @@ const CertificationsAndCourses = ({
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
-                  onClick={() => setVisible(true)}
+                  onClick={() => {
+                    setEditableCertificates([...certificates]);
+                    setSelectedCerts([]);
+                    setVisible(true)}}
                   style={{
                     fontSize: "1.1rem",
                     color: "gray",
@@ -162,7 +168,7 @@ const CertificationsAndCourses = ({
             }}
             ref={certsListRef}
           >
-            {certificates.map((skill, index) => (
+            {editableCertificates.map((skill, index) => (
               <div
                 style={{
                   display: "flex",

@@ -17,29 +17,31 @@ const ProfessionalExperience = ({
   const [selectedExperiences, setSelectedExperiences] = useState([]);
   const [hoveredItem, setHoveredItem] = useState(false);
   const experienceListRef = useRef(null);
+  const [editableExperience, setEditableExperience] = useState([]);
 
   const handleSave = () => {
-    const filteredExperience = professionalExperience.filter(
+    const filteredExperience = editableExperience.filter(
       (exp) => exp.trim() !== ""
     );
     setProfessionalExperience(filteredExperience);
-    experienceEmitter(professionalExperience);
+    experienceEmitter(filteredExperience);
     setVisible(false);
   };
 
   const onExperienceChanges = (e) => {
     const index = parseInt(e.target.name, 10);
-    const updatedExperience = [...professionalExperience];
+    const updatedExperience = [...editableExperience];
     updatedExperience[index] = e.target.value;
-    setProfessionalExperience(updatedExperience);
+    setEditableExperience(updatedExperience);
   };
 
   const handleReset = () => {
-    setProfessionalExperience(experience);
+    setEditableExperience([...professionalExperience]);
+    setSelectedExperiences([]);
   };
 
   const handleAddExperience = () => {
-    setProfessionalExperience([...professionalExperience, ""]);
+    setEditableExperience([...editableExperience, ""]);
     setTimeout(() => {
       if (experienceListRef.current) {
         experienceListRef.current.scrollTop =
@@ -59,6 +61,7 @@ const ProfessionalExperience = ({
       (_, index) => !selectedExperiences[index]
     );
     const newSelections = selectedExperiences.filter((selected) => !selected);
+    setEditableExperience(newExperiences);
     setProfessionalExperience(newExperiences);
     setSelectedExperiences(newSelections);
   };
@@ -123,7 +126,11 @@ const ProfessionalExperience = ({
               {hoveredItem && (
                 <i
                   className="pi pi-pencil"
-                  onClick={() => setVisible(true)}
+                  onClick={() => {
+                    setEditableExperience([...professionalExperience]);
+                    setSelectedExperiences([]);
+                    setVisible(true);
+                  }}
                   style={{
                     fontSize: "1.1rem",
                     color: "gray",
@@ -164,7 +171,7 @@ const ProfessionalExperience = ({
               }}
               ref={experienceListRef}
             >
-              {professionalExperience.map((skill, index) => (
+              {editableExperience.map((skill, index) => (
                 <div
                   style={{
                     display: "flex",
