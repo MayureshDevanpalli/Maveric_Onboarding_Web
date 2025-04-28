@@ -4,8 +4,13 @@ import "primeicons/primeicons.css";
 import { Checkbox } from "primereact/checkbox";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
+import SeeOriginal from "./SeeOriginal";
 
-const CertificationsAndCourses = ({ certs, certEmitter }) => {
+const CertificationsAndCourses = ({
+  certs,
+  certEmitter,
+  originalCertifications,
+}) => {
   const [certificates, setCertificates] = useState(certs);
   const [visible, setVisible] = useState(false);
   const [selectedCerts, setSelectedCerts] = useState([]);
@@ -57,6 +62,14 @@ const CertificationsAndCourses = ({ certs, certEmitter }) => {
     setCertificates(newExperiences);
     setSelectedCerts(newSelections);
   };
+
+  const headerElement = (
+    <SeeOriginal
+      data={originalCertifications}
+      title="Certifications and Courses"
+      width="30vw"
+    ></SeeOriginal>
+  );
 
   return (
     <>
@@ -128,7 +141,7 @@ const CertificationsAndCourses = ({ certs, certEmitter }) => {
       </div>
       <Dialog
         draggable={false}
-        header="Professional Experience"
+        header={headerElement}
         visible={visible}
         style={{ width: "60vw", height: "80vh" }}
         onHide={() => {

@@ -4,8 +4,9 @@ import "primeicons/primeicons.css";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Checkbox } from "primereact/checkbox";
+import SeeOriginal from "./SeeOriginal";
 
-const Awards = ({ awards, awardsEmitter }) => {
+const Awards = ({ awards, awardsEmitter, originalAwards }) => {
   const [visible, setVisible] = useState(false);
   const [updatedAwards, setUpdatedAwards] = useState(awards);
   const [selectedAwards, setSelectedAwards] = useState([]);
@@ -57,6 +58,14 @@ const Awards = ({ awards, awardsEmitter }) => {
     setUpdatedAwards(newAwards);
     setSelectedAwards(newSelections);
   };
+
+  const headerElement = (
+    <SeeOriginal
+      data={originalAwards}
+      title="Awards & Recognitions"
+      width="40vw"
+    ></SeeOriginal>
+  );
 
   return (
     <>
@@ -128,7 +137,7 @@ const Awards = ({ awards, awardsEmitter }) => {
         </div>
         <Dialog
           draggable={false}
-          header="Awards & Recognitions"
+          header={headerElement}
           visible={visible}
           style={{ width: "60vw", height: "80vh" }}
           onHide={() => {

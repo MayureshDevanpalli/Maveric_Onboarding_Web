@@ -4,8 +4,9 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import "primeicons/primeicons.css";
+import SeeOriginal from "./SeeOriginal";
 
-const Header = ({ headers, headersEmitter }) => {
+const Header = ({ headers, headersEmitter, originalHeaders }) => {
   const [visible, setVisible] = useState(false);
   const [hoveredItem, setHoveredItem] = useState("");
 
@@ -30,6 +31,14 @@ const Header = ({ headers, headersEmitter }) => {
   const handleReset = () => {
     setUpdatedHeaders(headers);
   };
+
+  const headerElement = (
+    <SeeOriginal
+      data={originalHeaders}
+      title="Headers"
+      width="30vw"
+    ></SeeOriginal>
+  );
 
   return (
     <>
@@ -108,9 +117,9 @@ const Header = ({ headers, headersEmitter }) => {
         </div>
         <Dialog
           draggable={false}
-          header="Header"
+          header={headerElement}
           visible={visible}
-          style={{ width: "50dvw" }}
+          style={{ width: "50vw" }}
           onHide={() => {
             if (!visible) return;
             setVisible(false);
@@ -122,10 +131,11 @@ const Header = ({ headers, headersEmitter }) => {
               paddingTop: "0",
               display: "flex",
               gap: "2rem",
+              marginBottom: "1rem",
             }}
           >
             <div>
-              <div>Candidate Name: </div>
+              <div style={{ marginBottom: "1rem" }}>Candidate Name: </div>
               <InputText
                 name="candidateName"
                 value={updatedHeaders.candidateName}
@@ -134,7 +144,7 @@ const Header = ({ headers, headersEmitter }) => {
               />
             </div>
             <div>
-              <div>Candidate Position: </div>
+              <div style={{ marginBottom: "1rem" }}>Candidate Position: </div>
               <InputText
                 name="candidatePosition"
                 value={updatedHeaders.candidatePosition}

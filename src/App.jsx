@@ -64,6 +64,8 @@ function App() {
     // set file name and size
     setFile(file);
     setSchemaStructured(null);
+    setMatchedSills(null);
+    setRequiredSkills(null);
 
     // Extract data from the file
     const formData = new FormData();
@@ -251,6 +253,8 @@ Bachelor’s or Master’s degree in Computer Science, Engineering, or a related
                 outlined
                 onClick={() => {
                   setFile(null);
+                  setMatchedSills(null);
+                  setRequiredSkills(null);
                   setSchemaStructured(null);
                   toast.current.show({
                     severity: "warn",

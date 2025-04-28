@@ -118,39 +118,50 @@ const ResumeEditor = ({ data }) => {
       >
         {schemaStructured.headers && <Header
           headers={schemaStructured.headers}
-          headersEmitter={onHeaderChanges}
-        ></Header>}
+          originalHeaders={data.headers}
+          headersEmitter={onHeaderChanges}>
+        </Header>}
         {schemaStructured.professionalSummary && <ProfessionalSummary
           summary={schemaStructured.professionalSummary}
           originalSummary={data.professionalSummary}
-          summaryEmitter={onSummaryChanges}
-        ></ProfessionalSummary>}
-        {schemaStructured.professionalExperience && schemaStructured.professionalExperience.length !== 0 && <ProfessionalExperience
+          summaryEmitter={onSummaryChanges}>
+        </ProfessionalSummary>}
+        {schemaStructured.professionalExperience && schemaStructured.professionalExperience.length !== 0 &&
+        <ProfessionalExperience
           experience={schemaStructured.professionalExperience}
           originalExperience={data.professionalExperience}
-          experienceEmitter={onExperienceChanges}
-        ></ProfessionalExperience>}
-        {schemaStructured.awards && schemaStructured.awards.length !== 0 && <Awards
+          experienceEmitter={onExperienceChanges}>
+        </ProfessionalExperience>}
+        {schemaStructured.awards && schemaStructured.awards.length !== 0 &&
+        <Awards
           awards={schemaStructured.awards}
-          awardsEmitter={onAwardsChanges}
-        ></Awards>}
-        {schemaStructured.certifications && schemaStructured.certifications.length !== 0 && <CertificationsAndCourses
+          originalAwards={data.awards}
+          awardsEmitter={onAwardsChanges}>
+        </Awards>}
+        {schemaStructured.certifications && schemaStructured.certifications.length !== 0 && 
+        <CertificationsAndCourses
           certs={schemaStructured.certifications}
-          certEmitter={onCertsChanges}
-        ></CertificationsAndCourses>}
-        {schemaStructured.education && schemaStructured.education.length !== 0 && <EducationAndQualifications
+          originalCertifications={data.certifications}
+          certEmitter={onCertsChanges}>
+        </CertificationsAndCourses>}
+        {schemaStructured.education && schemaStructured.education.length !== 0 &&
+        <EducationAndQualifications
           eduList={schemaStructured.education}
           eduListEmitter={onEduListChanges}
-        ></EducationAndQualifications>}
-        {schemaStructured.credits && schemaStructured.credits.length !== 0 && <Credits
+          originalEduList={data.education}>
+        </EducationAndQualifications>}
+        {schemaStructured.credits && schemaStructured.credits.length !== 0 &&
+        <Credits
           creditMap={schemaStructured.credits}
           creditEmitter={onCreditsChanges}
-        ></Credits>}
-        {schemaStructured.projectExperience && schemaStructured.projectExperience.length !== 0 && <ProjectExperience
+          originalCredits={data.credits}>
+        </Credits>}
+        {schemaStructured.projectExperience && schemaStructured.projectExperience.length !== 0 &&
+        <ProjectExperience
           projects={schemaStructured.projectExperience}
           originalProjects={data.projectExperience}
-          projectEmitter={onProjectChanges}
-        ></ProjectExperience>}
+          projectEmitter={onProjectChanges}>
+        </ProjectExperience>}
         <Button
           onClick={downloadResume}
           label="Download Resume"
