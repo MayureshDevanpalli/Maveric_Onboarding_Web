@@ -23,6 +23,7 @@ function App() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [schemaStructured, setSchemaStructured] = useState(null);
+  const [rawStructured, setRawStructured] = useState(null);
   const [requiredSkills, setRequiredSkills] = useState(null);
   const [matchedSills, setMatchedSills] = useState(null);
 
@@ -70,35 +71,57 @@ function App() {
     // Extract data from the file
     const formData = new FormData();
     formData.append("file", file);
-    try {
-      setLoading(true);
-      const response = await fetch("http://localhost:8080/api/resume/parse", {
+    setLoading(true);
+
+    Promise.all([
+      fetch("http://localhost:8080/api/resume/parse", {
         method: "POST",
         body: formData,
+      }),
+      fetch("http://localhost:8080/api/resume/parse-raw-resume", {
+        method: "POST",
+        body: formData,
+      }),
+    ])
+      .then(async ([response1, response2]) => {
+        const data = await response1.json();
+        const rawData = await response2.json();
+
+        const mappedSchema = {
+          headers: data.headers || {},
+          professionalSummary: data.professionalSummary || "",
+          professionalExperience: data.professionalExperience || [],
+          awards: data.awards || [],
+          certifications: data.certifications || [],
+          education: data.education || [],
+          credits: data.credits || [],
+          projectExperience: data.projectExperience || [],
+        };
+
+        const rawMappedSchema = {
+          headers: rawData.headers || {},
+          professionalSummary: rawData.professionalSummary || "",
+          professionalExperience: rawData.professionalExperience || [],
+          awards: rawData.awards || [],
+          certifications: rawData.certifications || [],
+          education: rawData.education || [],
+          credits: rawData.credits || [],
+          projectExperience: rawData.projectExperience || [],
+        };
+
+        setSchemaStructured(mappedSchema);
+        setRawStructured(rawMappedSchema);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Error during API calls:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+        setTimeout(() => {
+          matchSkills();
+        }, 0);
       });
-
-      const data = await response.json();
-
-      const mappedSchema = {
-        headers: data.headers || {},
-        professionalSummary: data.professionalSummary || "",
-        professionalExperience: data.professionalExperience || [],
-        awards: data.awards || [],
-        certifications: data.certifications || [],
-        education: data.education || [],
-        credits: data.credits || [],
-        projectExperience: data.projectExperience || [],
-      };
-
-      setSchemaStructured(mappedSchema);
-      setLoading(false);
-      setTimeout(() => {
-        matchSkills();
-      }, 0);
-    } catch (error) {
-      setLoading(false);
-      console.error("Error:", error);
-    }
   };
 
   const matchSkills = async () => {
@@ -277,7 +300,9 @@ Bachelor’s or Master’s degree in Computer Science, Engineering, or a related
             title="Preview Resume"
             style={{ backgroundColor: "#f1f1f1", color: "#1a4879" }}
           >
-            {schemaStructured && <ResumeEditor data={schemaStructured} />}
+            {schemaStructured && (
+              <ResumeEditor data={schemaStructured} rawData={rawStructured} />
+            )}
             {!schemaStructured && (
               <div style={{ textAlign: "center" }}>no file selected</div>
             )}
