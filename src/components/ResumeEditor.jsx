@@ -120,14 +120,14 @@ const ResumeEditor = ({ data, rawData }) => {
         {schemaStructured.headers && (
           <Header
             headers={schemaStructured.headers}
-            originalHeaders={rawData.headers}
+            originalHeaders={rawData?.headers}
             headersEmitter={onHeaderChanges}
           ></Header>
         )}
         {schemaStructured.professionalSummary && (
           <ProfessionalSummary
             summary={schemaStructured.professionalSummary}
-            originalSummary={rawData.professionalSummary}
+            originalSummary={rawData?.professionalSummary}
             summaryEmitter={onSummaryChanges}
           ></ProfessionalSummary>
         )}
@@ -135,14 +135,14 @@ const ResumeEditor = ({ data, rawData }) => {
           schemaStructured.professionalExperience.length !== 0 && (
             <ProfessionalExperience
               experience={schemaStructured.professionalExperience}
-              originalExperience={rawData.professionalExperience}
+              originalExperience={rawData?.professionalExperience}
               experienceEmitter={onExperienceChanges}
             ></ProfessionalExperience>
           )}
         {schemaStructured.awards && schemaStructured.awards.length !== 0 && (
           <Awards
             awards={schemaStructured.awards}
-            originalAwards={rawData.awards}
+            originalAwards={rawData?.awards}
             awardsEmitter={onAwardsChanges}
           ></Awards>
         )}
@@ -150,7 +150,7 @@ const ResumeEditor = ({ data, rawData }) => {
           schemaStructured.certifications.length !== 0 && (
             <CertificationsAndCourses
               certs={schemaStructured.certifications}
-              originalCertifications={rawData.certifications}
+              originalCertifications={rawData?.certifications}
               certEmitter={onCertsChanges}
             ></CertificationsAndCourses>
           )}
@@ -159,21 +159,21 @@ const ResumeEditor = ({ data, rawData }) => {
             <EducationAndQualifications
               eduList={schemaStructured.education}
               eduListEmitter={onEduListChanges}
-              originalEduList={rawData.education}
+              originalEduList={rawData?.education}
             ></EducationAndQualifications>
           )}
         {schemaStructured.credits && schemaStructured.credits.length !== 0 && (
           <Credits
             creditMap={schemaStructured.credits}
             creditEmitter={onCreditsChanges}
-            originalCredits={rawData.credits}
+            originalCredits={rawData?.credits}
           ></Credits>
         )}
         {schemaStructured.projectExperience &&
           schemaStructured.projectExperience.length !== 0 && (
             <ProjectExperience
               projects={schemaStructured.projectExperience}
-              originalProjects={rawData.projectExperience}
+              originalProjects={rawData?.projectExperience}
               projectEmitter={onProjectChanges}
             ></ProjectExperience>
           )}
