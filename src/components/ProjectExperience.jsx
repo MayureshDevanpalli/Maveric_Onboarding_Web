@@ -536,12 +536,8 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
           header="Responsibility"
           visible={dialogVisible}
           style={{ width: "60vw", height: "80vh" }}
-          onHide={() => {
-            console.log("dialogVisible ", dialogVisible);
-            
+          onHide={() => {            
             if (!dialogVisible) return;
-            console.log("dialogVisible 2 ", dialogVisible);
-
             handleDialogReset();
             setDialogVisible(false);
           }}
