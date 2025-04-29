@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { Button } from "primereact/button";
 
@@ -120,6 +120,17 @@ const SeeOriginal = ({ data, title, width }) => {
     document.body.style.overflow = "auto";
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.key === "c") {
+        op.current?.hide(); // Close the panel
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
@@ -143,6 +154,8 @@ const SeeOriginal = ({ data, title, width }) => {
           style={{
             width: width,
             backgroundColor: "#ebeae8",
+            maxHeight: "500px",
+            overflowY: "auto",
           }}
           onShow={onShow}
           onHide={onHide}
