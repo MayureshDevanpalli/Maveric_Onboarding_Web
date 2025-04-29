@@ -83,7 +83,6 @@ const ResumeEditor = ({ data, rawData }) => {
   };
 
   const onCreditsChanges = (updatedCredits) => {
-    console.log("in resume ", updatedCredits);
     setSchemaStructured((prevData) => ({
       ...prevData,
       credits: updatedCredits,

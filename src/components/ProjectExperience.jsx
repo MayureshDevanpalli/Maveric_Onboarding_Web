@@ -14,9 +14,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [projectExperience, setProjectExperience] = useState(projects);
   const projectExperienceListRef = useRef(null);
-  const [projectResponsibility, setProjectResponsibility] = useState(null);
+  const [projectResponsibility, setProjectResponsibility] = useState([]);
   const [selectedResponsibility, setSelectedResponsibility] = useState([]);
-  const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState([]);
   const [savedProjectExperience, setSavedProjectExperience] = useState(
     projects.map((p) => ({
       ...p,
@@ -30,7 +30,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
 
   const handleDialogEditClick = (index) => {
     setSelectedProjectIndex(index);
-    setProjectResponsibility([...projectExperience[index].responsibilities]);
+    setProjectResponsibility(Array.isArray(projectExperience[index]?.responsibilities)
+    ? [...projectExperience[index].responsibilities]
+    : []);
     setDialogVisible(true);
   };
 
@@ -45,7 +47,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const handleSave = () => {
     const updatedProjects = projectExperience.map((p) => ({
       ...p,
-      responsibilities: [...p.responsibilities],
+      responsibilities: Array.isArray(p.responsibilities)
+        ? [...p.responsibilities]
+        : [],
     }));
     setSavedProjectExperience(updatedProjects);
 
@@ -89,9 +93,11 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   };
 
   const handleDialogReset = () => {
-    setProjectResponsibility([
-      ...projectExperience[selectedProjectIndex].responsibilities,
-    ]);
+    const responsibilities =
+      Array.isArray(projectExperience[selectedProjectIndex]?.responsibilities)
+        ? projectExperience[selectedProjectIndex].responsibilities
+        : [];
+    setProjectResponsibility([...responsibilities]);
   };
 
   const handleAddProjectResponsibility = () => {
@@ -171,38 +177,30 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                         width="30%"
                       >
                         <div>
-                          <div>
-                            <span style={{ fontWeight: "bold" }}>Client:</span>{" "}
-                            {exp.client}
-                          </div>
-                          <div>
-                            <span style={{ fontWeight: "bold" }}>Project:</span>{" "}
-                            {exp.project}
-                          </div>
-                          <div>
-                            <span style={{ fontWeight: "bold" }}>
-                              Location:
-                            </span>{" "}
-                            {exp.location}
-                          </div>
-                          <div>
-                            <span style={{ fontWeight: "bold" }}>Role:</span>{" "}
-                            {exp.role}
-                          </div>
-                          <div>
-                            <span style={{ fontWeight: "bold" }}>
-                              Duration:
-                            </span>{" "}
-                            {exp.duration}
-                          </div>
-                          <div>
-                            <span style={{ fontWeight: "bold" }}>Tools:</span>{" "}
-                            {exp.tools?.join(", ")}
-                          </div>
+                          {exp.client && <div>
+                            <span style={{ fontWeight: "bold" }}>Client:</span> {exp.client}
+                          </div>}
+                          {exp.project && <div>
+                            <span style={{ fontWeight: "bold" }}>Project:</span> {exp.project}
+                          </div>}
+                          {exp.location && <div>
+                            <span style={{ fontWeight: "bold" }}>Location:</span> {exp.location}
+                          </div>}
+                          {exp.role && <div>
+                            <span style={{ fontWeight: "bold" }}>Role:</span> {exp.role}
+                          </div>}
+                          {exp.duration && <div>
+                            <span style={{ fontWeight: "bold" }}>Duration:</span> {exp.duration}
+                          </div>}
+                          {exp.tools && exp.tools !== undefined && <div>
+                            <span style={{ fontWeight: "bold" }}>Tools:</span> {exp.tools?.join(", ")}
+                          </div>}
                         </div>
                       </td>
                       <td>
                         <div>
+                          {exp.description && 
+                          <div>
                           <div style={{ fontWeight: "bold" }}>Description:</div>
                           <div
                             style={{
@@ -214,6 +212,8 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                           >
                             {exp.description}
                           </div>
+                          </div>}
+                          { exp.responsibilities && exp.responsibilities.length !==0 && <div>
                           <div style={{ fontWeight: "bold" }}>
                             Responsibilities:
                           </div>
@@ -222,6 +222,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                               <li key={index}>{skill}</li>
                             ))}
                           </ul>
+                          </div>}
                         </div>
                       </td>
                     </tr>
@@ -535,7 +536,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
           header="Responsibility"
           visible={dialogVisible}
           style={{ width: "60vw", height: "80vh" }}
-          onHide={() => {
+          onHide={() => {            
             if (!dialogVisible) return;
             handleDialogReset();
             setDialogVisible(false);
