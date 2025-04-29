@@ -14,9 +14,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [projectExperience, setProjectExperience] = useState(projects);
   const projectExperienceListRef = useRef(null);
-  const [projectResponsibility, setProjectResponsibility] = useState(null);
+  const [projectResponsibility, setProjectResponsibility] = useState([]);
   const [selectedResponsibility, setSelectedResponsibility] = useState([]);
-  const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState([]);
   const [savedProjectExperience, setSavedProjectExperience] = useState(
     projects.map((p) => ({
       ...p,
@@ -30,7 +30,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
 
   const handleDialogEditClick = (index) => {
     setSelectedProjectIndex(index);
-    setProjectResponsibility([...projectExperience[index].responsibilities]);
+    setProjectResponsibility(Array.isArray(projectExperience[index]?.responsibilities)
+    ? [...projectExperience[index].responsibilities]
+    : []);
     setDialogVisible(true);
   };
 
@@ -45,7 +47,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const handleSave = () => {
     const updatedProjects = projectExperience.map((p) => ({
       ...p,
-      responsibilities: [...p.responsibilities],
+      responsibilities: Array.isArray(p.responsibilities)
+        ? [...p.responsibilities]
+        : [],
     }));
     setSavedProjectExperience(updatedProjects);
 
@@ -89,7 +93,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   };
 
   const handleDialogReset = () => {
-    setProjectResponsibility([
+    projectExperience[selectedProjectIndex].responsibilities && setProjectResponsibility([
       ...projectExperience[selectedProjectIndex].responsibilities,
     ]);
   };
@@ -207,7 +211,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                             {exp.description}
                           </div>
                           </div>}
-                          {exp.responsibilities.length !==0 && <div>
+                          { exp.responsibilities && exp.responsibilities.length !==0 && <div>
                           <div style={{ fontWeight: "bold" }}>
                             Responsibilities:
                           </div>
@@ -531,7 +535,11 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
           visible={dialogVisible}
           style={{ width: "60vw", height: "80vh" }}
           onHide={() => {
+            console.log("dialogVisible ", dialogVisible);
+            
             if (!dialogVisible) return;
+            console.log("dialogVisible 2 ", dialogVisible);
+
             handleDialogReset();
             setDialogVisible(false);
           }}
