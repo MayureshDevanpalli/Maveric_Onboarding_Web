@@ -54,71 +54,73 @@ const SeeOriginal = ({ data, title, width }) => {
     <div>Data not found</div>
   );
 
-  const ProjectsExperience = data ? (
-    <div style={{ height: "70vh", overflowY: "auto" }}>
-      <table
-        className="table table-bordered"
-        style={{ borderColor: "black", fontSize: "13px" }}
-      >
-        <tbody>
-          {(Array.isArray(data) ? data : []).map((exp, index) => (
-            <tr key={index}>
-              <td scope="row" style={{ backgroundColor: "#ebeae8" }}>
-                <div>
+  const ProjectsExperience =
+    data && data.length > 0 ? (
+      <div style={{ height: "70vh", overflowY: "auto" }}>
+        <table
+          className="table table-bordered"
+          style={{ borderColor: "black", fontSize: "13px" }}
+        >
+          <tbody>
+            {(Array.isArray(data) ? data : []).map((exp, index) => (
+              <tr key={index}>
+                <td scope="row" style={{ backgroundColor: "#ebeae8" }}>
                   <div>
-                    <span style={{ fontWeight: "bold" }}>Client:</span>{" "}
-                    {exp.client}
+                    <div>
+                      <span style={{ fontWeight: "bold" }}>Client:</span>{" "}
+                      {exp.client}
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: "bold" }}>Project:</span>{" "}
+                      {exp.project}
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: "bold" }}>Location:</span>{" "}
+                      {exp.location}
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: "bold" }}>Role:</span>{" "}
+                      {exp.role}
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: "bold" }}>Duration:</span>{" "}
+                      {exp.duration}
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: "bold" }}>Tools:</span>{" "}
+                      {exp.tools?.join(", ")}
+                    </div>
                   </div>
+                </td>
+                <td style={{ backgroundColor: "#ebeae8" }}>
                   <div>
-                    <span style={{ fontWeight: "bold" }}>Project:</span>{" "}
-                    {exp.project}
+                    <div style={{ fontWeight: "bold" }}>Description:</div>
+                    <div
+                      style={{
+                        marginBottom: "1rem",
+                        paddingLeft: "1rem",
+                        paddingRight: "1rem",
+                        textAlign: "justify",
+                      }}
+                    >
+                      {exp.description}
+                    </div>
+                    <div style={{ fontWeight: "bold" }}>Responsibilities:</div>
+                    <ul>
+                      {exp.responsibilities?.map((skill, index) => (
+                        <li key={index}>{skill}</li>
+                      ))}
+                    </ul>
                   </div>
-                  <div>
-                    <span style={{ fontWeight: "bold" }}>Location:</span>{" "}
-                    {exp.location}
-                  </div>
-                  <div>
-                    <span style={{ fontWeight: "bold" }}>Role:</span> {exp.role}
-                  </div>
-                  <div>
-                    <span style={{ fontWeight: "bold" }}>Duration:</span>{" "}
-                    {exp.duration}
-                  </div>
-                  <div>
-                    <span style={{ fontWeight: "bold" }}>Tools:</span>{" "}
-                    {exp.tools?.join(", ")}
-                  </div>
-                </div>
-              </td>
-              <td style={{ backgroundColor: "#ebeae8" }}>
-                <div>
-                  <div style={{ fontWeight: "bold" }}>Description:</div>
-                  <div
-                    style={{
-                      marginBottom: "1rem",
-                      paddingLeft: "1rem",
-                      paddingRight: "1rem",
-                      textAlign: "justify",
-                    }}
-                  >
-                    {exp.description}
-                  </div>
-                  <div style={{ fontWeight: "bold" }}>Responsibilities:</div>
-                  <ul>
-                    {exp.responsibilities?.map((skill, index) => (
-                      <li key={index}>{skill}</li>
-                    ))}
-                  </ul>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  ) : (
-    <div>Data not found</div>
-  );
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      <div>Data not found</div>
+    );
 
   const onShow = () => {
     document.body.style.overflow = "hidden";
@@ -160,7 +162,7 @@ const SeeOriginal = ({ data, title, width }) => {
         <OverlayPanel
           ref={op}
           style={{
-            width: width,
+            width: data ? width : "20rem",
             backgroundColor: "#ebeae8",
             maxHeight: "500px",
             overflowY: "auto",

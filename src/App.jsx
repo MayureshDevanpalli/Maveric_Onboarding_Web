@@ -10,8 +10,6 @@ import "./App.css";
 import SkillsCard from "./components/SkillsCard";
 import FullPageSpinner from "./components/FullPageSpinner";
 
-// severity?: 'success' | 'info' | 'warn' | 'error' | 'secondary' | 'contrast'
-
 const navStyle = {
   display: "flex",
   alignItems: "center",
@@ -78,10 +76,10 @@ function App() {
         method: "POST",
         body: formData,
       }),
-      // fetch("http://localhost:8080/api/resume/parse-raw-resume", {
-      //   method: "POST",
-      //   body: formData,
-      // }),
+      fetch("http://localhost:8080/api/resume/parse-raw-resume", {
+        method: "POST",
+        body: formData,
+      }),
     ])
       .then(async ([response1, response2]) => {
         const data = await response1?.json();
