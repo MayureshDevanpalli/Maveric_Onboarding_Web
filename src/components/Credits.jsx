@@ -5,11 +5,13 @@ import { InputTextarea } from "primereact/inputtextarea";
 import "primeicons/primeicons.css";
 import SeeOriginal from "./SeeOriginal";
 import { InputText } from "primereact/inputtext";
+import { Checkbox } from "primereact/checkbox";
 import "../App.css";
 
 const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
   const [hoveredItem, setHoveredItem] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [selectedCredits, setSelectedCredits] = useState([]);
   const normalizeCredits = (credits) =>
     credits.map((credit) => ({
       ...credit,
@@ -27,17 +29,27 @@ const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
   };
 
   const handleSave = () => {
-    const transformed = credits.map((credit) => ({
-      ...credit,
-      items:
-        typeof credit.items === "string"
-          ? credit.items
-              .split(",")
-              .map((item) => item.trim())
-              .filter(Boolean)
-          : credit.items, // fallback if already array
-    }));
+    const transformed = credits
+      // remove rows with blank key or values
+      .filter(
+        (credit) =>
+          credit.category.toString().trim() !== "" ||
+          credit.items?.toString().trim() !== ""
+      )
+      // convert string with , into list of string
+      .map((credit) => ({
+        ...credit,
+        items:
+          typeof credit.items === "string"
+            ? credit.items
+                .split(",")
+                .map((item) => item.trim())
+                .filter(Boolean)
+            : credit.items,
+      }));
     setInitialCredits(transformed);
+    setCredits(transformed);
+    setSelectedCredits([]);
     creditEmitter(transformed);
     setVisible(false);
   };
@@ -50,6 +62,24 @@ const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
     const updated = [...credits];
     updated[index] = { ...updated[index], [field]: value };
     setCredits(updated);
+  };
+
+  const handleAddCredit = () => {
+    setCredits([...credits, { category: "", items: "" }]);
+  };
+
+  const toggleCheckbox = (index) => {
+    const updatedSelections = [...selectedCredits];
+    updatedSelections[index] = !updatedSelections[index];
+    setSelectedCredits(updatedSelections);
+  };
+
+  const handleDeleteSelected = () => {
+    const updatedCredits = credits.filter(
+      (_, index) => !selectedCredits[index]
+    );
+    setCredits(updatedCredits);
+    setSelectedCredits([]); // Clear selection after deletion
   };
 
   const headerElement = (
@@ -179,6 +209,16 @@ const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
                   {credits.map((credit, index) => (
                     <tr key={index}>
                       <td
+                        width="5%"
+                        style={{ paddingTop: "1rem", paddingLeft: "1rem" }}
+                      >
+                        <Checkbox
+                          style={{ marginRight: "1rem" }}
+                          checked={selectedCredits[index] || false}
+                          onChange={() => toggleCheckbox(index)}
+                        ></Checkbox>
+                      </td>
+                      <td
                         scope="row"
                         style={{
                           backgroundColor: "lightGrey",
@@ -224,30 +264,65 @@ const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
                 </tbody>
               </table>
             </div>
-            <div style={{ marginTop: "1rem" }}>
-              <Button
-                label="Save"
-                outlined
-                style={{
-                  width: "122px",
-                  borderRadius: "5px",
-                  borderColor: "#c2257c",
-                  color: "#c2257c",
-                }}
-                onClick={handleSave}
-              />
-              <Button
-                label="Reset"
-                outlined
-                style={{
-                  width: "122px",
-                  borderRadius: "5px",
-                  borderColor: "#1a4879",
-                  color: "#1a4879",
-                  marginLeft: "1rem",
-                }}
-                onClick={handleReset}
-              />
+            <div
+              style={{
+                marginTop: "1rem",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <div>
+                <Button
+                  label="Save"
+                  outlined
+                  style={{
+                    width: "122px",
+                    borderRadius: "5px",
+                    borderColor: "#c2257c",
+                    color: "#c2257c",
+                  }}
+                  onClick={handleSave}
+                />
+                <Button
+                  label="Reset"
+                  outlined
+                  style={{
+                    width: "122px",
+                    borderRadius: "5px",
+                    borderColor: "#1a4879",
+                    color: "#1a4879",
+                    marginLeft: "1rem",
+                  }}
+                  onClick={handleReset}
+                />
+              </div>
+              <div>
+                <Button
+                  label="Add Credits"
+                  outlined
+                  style={{
+                    width: "200px",
+                    borderRadius: "5px",
+                    borderColor: "#4ade80",
+                    background: "#4ade80",
+                    color: "white",
+                    marginRight: "1rem",
+                  }}
+                  onClick={handleAddCredit}
+                />
+                <Button
+                  disabled={selectedCredits.length === 0}
+                  label="Delete Selected"
+                  style={{
+                    width: "180px",
+                    borderRadius: "5px",
+                    borderColor: "#f55442",
+                    background: "#f55442",
+                    color: "white",
+                  }}
+                  onClick={handleDeleteSelected}
+                />
+              </div>
             </div>
           </div>
         </Dialog>
