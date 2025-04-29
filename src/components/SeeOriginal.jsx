@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { Button } from "primereact/button";
 
@@ -6,28 +6,32 @@ const SeeOriginal = ({ data, title, width }) => {
   const op = useRef(null);
   const buttonRef = useRef(null);
 
-  const UnorderedList = (
+  const UnorderedList = data ? (
     <ul>
       {(Array.isArray(data) ? data : []).map((item, index) => (
         <li key={index}>{item}</li>
       ))}
     </ul>
+  ) : (
+    <div>Data not found</div>
   );
 
-  const HeaderDiv = (
+  const HeaderDiv = data ? (
     <div style={{ display: "flex", gap: "2rem" }}>
       <div>
         <div style={{ fontWeight: "bold" }}>Candidate Name:</div>
-        <div>{data.candidateName}</div>
+        <div>{data?.candidateName}</div>
       </div>
       <div>
         <div style={{ fontWeight: "bold" }}>Candidate Position:</div>
-        <div>{data.candidatePosition}</div>
+        <div>{data?.candidatePosition}</div>
       </div>
     </div>
+  ) : (
+    <div>Data not found</div>
   );
 
-  const CreditsTable = (
+  const CreditsTable = data ? (
     <table className="table table-bordered" style={{ borderColor: "black" }}>
       <tbody>
         {(Array.isArray(data) ? data : []).map((credit, index) => (
@@ -46,9 +50,11 @@ const SeeOriginal = ({ data, title, width }) => {
         ))}
       </tbody>
     </table>
+  ) : (
+    <div>Data not found</div>
   );
 
-  const ProjectsExperience = (
+  const ProjectsExperience = data ? (
     <div style={{ height: "70vh", overflowY: "auto" }}>
       <table
         className="table table-bordered"
@@ -110,6 +116,8 @@ const SeeOriginal = ({ data, title, width }) => {
         </tbody>
       </table>
     </div>
+  ) : (
+    <div>Data not found</div>
   );
 
   const onShow = () => {
@@ -119,6 +127,17 @@ const SeeOriginal = ({ data, title, width }) => {
   const onHide = () => {
     document.body.style.overflow = "auto";
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.ctrlKey && e.key === "c") {
+        op.current?.hide(); // Close the panel
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <>
@@ -143,6 +162,8 @@ const SeeOriginal = ({ data, title, width }) => {
           style={{
             width: width,
             backgroundColor: "#ebeae8",
+            maxHeight: "500px",
+            overflowY: "auto",
           }}
           onShow={onShow}
           onHide={onHide}
@@ -152,7 +173,7 @@ const SeeOriginal = ({ data, title, width }) => {
               case "Headers":
                 return HeaderDiv;
               case "Professional Summary":
-                return <div>{data}</div>;
+                return <div>{data ? data : "Data not found"}</div>;
               case "Awards & Recognitions":
                 return UnorderedList;
               case "Certifications and Courses":
