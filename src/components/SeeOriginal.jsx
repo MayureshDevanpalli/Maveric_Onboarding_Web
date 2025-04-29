@@ -3,8 +3,6 @@ import { OverlayPanel } from "primereact/overlaypanel";
 import { Button } from "primereact/button";
 
 const SeeOriginal = ({ data, title, width }) => {
-  console.log(data);
-
   const op = useRef(null);
   const buttonRef = useRef(null);
 

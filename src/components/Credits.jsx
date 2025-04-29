@@ -4,46 +4,52 @@ import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import "primeicons/primeicons.css";
 import SeeOriginal from "./SeeOriginal";
+import { InputText } from "primereact/inputtext";
 import "../App.css";
 
 const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
   const [hoveredItem, setHoveredItem] = useState(false);
-  const [credits, setCredits] = useState(creditMap);
   const [visible, setVisible] = useState(false);
-  const [editedValues, setEditedValues] = useState(
-    creditMap.map((credit) => credit.items.join(", "))
+  const normalizeCredits = (credits) =>
+    credits.map((credit) => ({
+      ...credit,
+      items: Array.isArray(credit.items)
+        ? credit.items.join(", ")
+        : credit.items,
+    }));
+  const [initialCredits, setInitialCredits] = useState(() =>
+    normalizeCredits(creditMap)
   );
+  const [credits, setCredits] = useState(() => normalizeCredits(creditMap));
 
   const handleEditClick = () => {
     setVisible(true);
-    setEditedValues(credits.map((credit) => credit.items.join(", ")));
   };
 
   const handleSave = () => {
-    const updatedCredits = credits.map((credit, index) => {
-      const items = editedValues[index]
-        .split(",")
-        .map((item) => item.trim())
-        .filter((item) => item !== ""); // <-- Remove empty strings
-
-      return {
-        ...credit,
-        items: items.length > 0 ? items : [], // If no valid items, set to []
-      };
-    });
-    setCredits(updatedCredits);
-    creditEmitter(updatedCredits);
+    const transformed = credits.map((credit) => ({
+      ...credit,
+      items:
+        typeof credit.items === "string"
+          ? credit.items
+              .split(",")
+              .map((item) => item.trim())
+              .filter(Boolean)
+          : credit.items, // fallback if already array
+    }));
+    setInitialCredits(transformed);
+    creditEmitter(transformed);
     setVisible(false);
   };
 
-  const handleChange = (value, index) => {
-    const updatedValues = [...editedValues];
-    updatedValues[index] = value;
-    setEditedValues(updatedValues);
+  const handleReset = () => {
+    setCredits([...initialCredits]);
   };
 
-  const handleReset = () => {
-    setEditedValues(credits.map((credit) => credit.items.join(", ")));
+  const handleChange = (index, field, value) => {
+    const updated = [...credits];
+    updated[index] = { ...updated[index], [field]: value };
+    setCredits(updated);
   };
 
   const headerElement = (
@@ -94,7 +100,7 @@ const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
                 style={{ borderColor: "black" }}
               >
                 <tbody>
-                  {credits.map((credit, index) => (
+                  {initialCredits.map((credit, index) => (
                     <tr key={index}>
                       <td
                         scope="row"
@@ -110,7 +116,11 @@ const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
                         </div>
                       </td>
                       <td>
-                        <div>{credit.items?.join(", ")}</div>
+                        <div>
+                          {Array.isArray(credit.items)
+                            ? credit.items.join(", ")
+                            : credit.items}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -170,26 +180,36 @@ const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
                     <tr key={index}>
                       <td
                         scope="row"
-                        style={{ backgroundColor: "lightGrey" }}
+                        style={{
+                          backgroundColor: "lightGrey",
+                        }}
                         width="30%"
                       >
                         <span style={{ fontWeight: "bold" }}>
-                          {credit.category}
+                          <InputText
+                            style={{ width: "100%" }}
+                            value={credit.category}
+                            onChange={(e) =>
+                              handleChange(index, "category", e.target.value)
+                            }
+                          />
                         </span>
                       </td>
                       <td
                         style={{
-                          padding: "2px",
                           display: "flex",
                           borderLeft: "none",
+                          padding: "10px",
                         }}
                       >
                         <InputTextarea
                           key={index}
                           name={index}
                           autoResize="false"
-                          value={editedValues[index]}
-                          onChange={(e) => handleChange(e.target.value, index)}
+                          value={credit.items}
+                          onChange={(e) =>
+                            handleChange(index, "items", e.target.value)
+                          }
                           style={{
                             resize: "none",
                             padding: 0,
