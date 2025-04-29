@@ -93,9 +93,11 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   };
 
   const handleDialogReset = () => {
-    projectExperience[selectedProjectIndex].responsibilities && setProjectResponsibility([
-      ...projectExperience[selectedProjectIndex].responsibilities,
-    ]);
+    const responsibilities =
+      Array.isArray(projectExperience[selectedProjectIndex]?.responsibilities)
+        ? projectExperience[selectedProjectIndex].responsibilities
+        : [];
+    setProjectResponsibility([...responsibilities]);
   };
 
   const handleAddProjectResponsibility = () => {
