@@ -20,10 +20,17 @@ const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
   };
 
   const handleSave = () => {
-    const updatedCredits = credits.map((credit, index) => ({
-      ...credit,
-      items: editedValues[index].split(",").map((item) => item.trim()),
-    }));
+    const updatedCredits = credits.map((credit, index) => {
+      const items = editedValues[index]
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item !== ""); // <-- Remove empty strings
+
+      return {
+        ...credit,
+        items: items.length > 0 ? items : [], // If no valid items, set to []
+      };
+    });
     setCredits(updatedCredits);
     creditEmitter(updatedCredits);
     setVisible(false);
