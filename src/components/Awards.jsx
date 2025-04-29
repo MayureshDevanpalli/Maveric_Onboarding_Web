@@ -14,7 +14,6 @@ const Awards = ({ awards, awardsEmitter, originalAwards }) => {
   const awardsListRef = useRef(null);
   const [editableAward, setEditableAward] = useState([]);
 
-
   const handleSave = () => {
     const filteredAwards = editableAward.filter((exp) => exp.trim() !== "");
     setUpdatedAwards(filteredAwards);
@@ -73,7 +72,6 @@ const Awards = ({ awards, awardsEmitter, originalAwards }) => {
         <div
           style={{
             backgroundColor: "white",
-            paddingBottom: "1rem",
             paddingLeft: "5rem",
             paddingRight: "5rem",
             width: "85vw",
