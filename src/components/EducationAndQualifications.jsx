@@ -125,7 +125,8 @@ const EducationAndQualifications = ({
                   onClick={() => {
                     setEditableEducation([...education]);
                     setSelectedEduList([]);
-                    setVisible(true)}}
+                    setVisible(true);
+                  }}
                   style={{
                     fontSize: "1.1rem",
                     color: "gray",

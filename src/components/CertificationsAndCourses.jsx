@@ -77,7 +77,6 @@ const CertificationsAndCourses = ({
         <div
           style={{
             backgroundColor: "white",
-            paddingBottom: "1rem",
             paddingTop: "1rem",
             paddingLeft: "5rem",
             paddingRight: "5rem",
@@ -126,7 +125,8 @@ const CertificationsAndCourses = ({
                   onClick={() => {
                     setEditableCertificates([...certificates]);
                     setSelectedCerts([]);
-                    setVisible(true)}}
+                    setVisible(true);
+                  }}
                   style={{
                     fontSize: "1.1rem",
                     color: "gray",

@@ -80,7 +80,6 @@ const ProfessionalExperience = ({
         <div
           style={{
             backgroundColor: "white",
-            paddingBottom: "1rem",
             paddingLeft: "5rem",
             paddingRight: "5rem",
             width: "85vw",
