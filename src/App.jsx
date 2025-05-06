@@ -221,7 +221,7 @@ Bachelor’s or Master’s degree in Computer Science, Engineering, or a related
       <div style={{ marginBottom: "1rem" }}>
         <nav style={navStyle}>
           <Image
-            src="src/assets/Maveric_Systems_Logo.jpg"
+            src="/assets/Maveric_Systems_Logo.jpg"
             alt="Image"
             width="250"
             className="col-md-5"
