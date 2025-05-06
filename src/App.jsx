@@ -72,11 +72,11 @@ function App() {
     setLoading(true);
 
     Promise.all([
-      fetch("http://localhost:8080/api/resume/parse", {
+      fetch(`${import.meta.env.VITE_API_URL}resume/parse`, {
         method: "POST",
         body: formData,
       }),
-      fetch("http://localhost:8080/api/resume/parse-raw-resume", {
+      fetch(`${import.meta.env.VITE_API_URL}resume/parse-raw-resume`, {
         method: "POST",
         body: formData,
       }),

@@ -18,7 +18,7 @@ const ResumeEditor = ({ data, rawData }) => {
 
   const downloadResume = () => {
     setLoading(true);
-    fetch("http://localhost:8080/api/resume/download-resume", {
+    fetch(`${import.meta.env.VITE_API_URL}resume/download-resume`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
