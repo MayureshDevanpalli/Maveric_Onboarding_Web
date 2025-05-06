@@ -18,6 +18,7 @@ const navStyle = {
 
 function App() {
   const toast = useRef(null);
+  const fileUploadRef = useRef(null);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [schemaStructured, setSchemaStructured] = useState(null);
@@ -82,8 +83,16 @@ function App() {
       }),
     ])
       .then(async ([response1, response2]) => {
+        fileUploadRef.current.clear();
+
         const data = await response1?.json();
         const rawData = await response2?.json();
+
+        if (!response1.ok) {
+          throw new Error(data.message || "Unknown error occurred");
+        } else if (!response2.ok) {
+          throw new Error(response2);
+        }
 
         if (response1 && data) {
           const mappedSchema = {
@@ -114,8 +123,13 @@ function App() {
         }
       })
       .catch((error) => {
+        fileUploadRef.current.clear();
         setLoading(false);
-        console.error("Error during API calls:", error);
+        toast.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: error.message,
+        });
       })
       .finally(() => {
         setLoading(false);
@@ -252,6 +266,7 @@ Bachelor’s or Master’s degree in Computer Science, Engineering, or a related
                 accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 onSelect={onFileSelect}
                 auto
+                ref={fileUploadRef}
                 customUpload
                 chooseLabel="Browse"
                 style={{
