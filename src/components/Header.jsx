@@ -55,7 +55,7 @@ const Header = ({ headers, headersEmitter, originalHeaders }) => {
         >
           <div>
             <Image
-              src="src/assets/Maveric_Systems_Logo.jpg"
+              src="assets/Maveric_Systems_Logo.jpg"
               alt="Image"
               width="150"
               className="col-md-5"
