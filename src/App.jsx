@@ -72,7 +72,7 @@ function App() {
     formData.append("file", file);
     setLoading(true);
 
-    Promise.all([
+    Promise.allSettled([
       fetch(`${import.meta.env.VITE_API_URL}resume/parse`, {
         method: "POST",
         body: formData,
@@ -82,19 +82,20 @@ function App() {
         body: formData,
       }),
     ])
-      .then(async ([response1, response2]) => {
+      .then(async ([res1, res2]) => {
+        console.log("then called");
         fileUploadRef.current.clear();
 
-        const data = await response1?.json();
-        const rawData = await response2?.json();
+        // Handle first response
+        let data = null;
+        if (res1.status === "fulfilled") {
+          const response1 = res1.value;
+          data = await response1.json();
 
-        if (!response1.ok) {
-          throw new Error(data.message || "Unknown error occurred");
-        } else if (!response2.ok) {
-          throw new Error(rawData.message || "Unknown error occurred");
-        }
+          if (!response1.ok) {
+            throw new Error(data.message || "Error in parse API");
+          }
 
-        if (response1 && data) {
           const mappedSchema = {
             headers: data.headers || {},
             professionalSummary: data.professionalSummary || "",
@@ -106,9 +107,20 @@ function App() {
             projectExperience: data.projectExperience || [],
           };
           setSchemaStructured(mappedSchema);
+        } else {
+          console.error("Parse API failed:", res1.reason);
         }
 
-        if (response2 && rawData) {
+        // Handle second response
+        let rawData = null;
+        if (res2.status === "fulfilled") {
+          const response2 = res2.value;
+          rawData = await response2.json();
+
+          if (!response2.ok) {
+            throw new Error(rawData.message || "Error in parse-raw-resume API");
+          }
+
           const rawMappedSchema = {
             headers: rawData.headers || {},
             professionalSummary: rawData.professionalSummary || "",
@@ -120,6 +132,8 @@ function App() {
             projectExperience: rawData.projectExperience || [],
           };
           setRawStructured(rawMappedSchema);
+        } else {
+          console.error("Raw Resume API failed:", res2.reason);
         }
       })
       .catch((error) => {
