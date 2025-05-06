@@ -252,6 +252,7 @@ Bachelor’s or Master’s degree in Computer Science, Engineering, or a related
                 accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 onSelect={onFileSelect}
                 auto
+                customUpload
                 chooseLabel="Browse"
                 style={{
                   marginRight: "2rem",
