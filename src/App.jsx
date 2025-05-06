@@ -91,7 +91,7 @@ function App() {
         if (!response1.ok) {
           throw new Error(data.message || "Unknown error occurred");
         } else if (!response2.ok) {
-          throw new Error(response2);
+          throw new Error(rawData.message || "Unknown error occurred");
         }
 
         if (response1 && data) {
