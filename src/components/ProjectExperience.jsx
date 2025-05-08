@@ -14,7 +14,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const [visible, setVisible] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const projectExperienceRef = useRef(null);
   const [projectExperience, setProjectExperience] = useState(projects);
+  const [selectedProject, setSelectedProject] = useState([]);
   const projectExperienceListRef = useRef(null);
   const [projectResponsibility, setProjectResponsibility] = useState([]);
   const [selectedResponsibility, setSelectedResponsibility] = useState([]);
@@ -63,6 +65,32 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
       responsibilities: [...p.responsibilities],
     }));
     setProjectExperience(reset);
+  };
+
+
+  const handleAddNewProjects = () => {
+    setProjectExperience([...projects, ""]);
+    setTimeout(() => {
+      if (projectExperienceRef.current) {
+        projectExperienceRef.current.scrollTop =
+        projectExperienceRef.current.scrollHeight;
+      }
+    }, 0);
+  }
+
+  const handleDeleteSelectedProject = () => {
+    const updatedProject = projectExperience.filter(
+      (_, index) => !selectedProject[index]
+    );
+    setSelectedProject([]);
+    setProjectExperience(updatedProject);
+    projectEmitter(updatedProject);
+  }
+
+  const toggleProjectExperience = (index) => {
+    const updatedSelections = [...selectedProject];
+    updatedSelections[index] = !updatedSelections[index];
+    setSelectedProject(updatedSelections);
   };
 
   const handleProjectDetailsReset = () => {
@@ -261,14 +289,14 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                 style={{ borderColor: "black" }}
               >
                 <tbody>
-                  {projectExperience.map((exp, index) => (
+                  {projectExperience?.map((exp, index) => (
                     <tr key={index}>
                       <td
                         scope="row"
                         style={{ backgroundColor: "lightGrey" }}
                         width="30%"
                       >
-                        {exp.projectDetails.map((expDetail, index) => (
+                        {exp.projectDetails?.map((expDetail, index) => (
                           <div key={index}>
                             <span style={{ fontWeight: "bold" }}>
                               {expDetail.key}:{" "}
@@ -345,6 +373,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
           style={{ width: "85vw", height: "90vh" }}
           onHide={() => {
             if (!visible) return;
+            handleReset();
             setVisible(false);
           }}
         >
@@ -359,14 +388,25 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
               height: "99%",
             }}
           >
-            <div style={{ overflowY: "auto" }}>
+            <div style={{ width: "98%", height: "650px", overflowY: "auto" }}
+                  ref={projectExperienceRef}>
               <table
                 className="table table-bordered"
                 style={{ borderColor: "black" }}
               >
                 <tbody>
-                  {projectExperience.map((exp, index) => (
+                  {projectExperience?.map((exp, index) => (
                     <tr key={index}>
+                      <td
+                        width="5%"
+                        style={{ paddingTop: "1rem", paddingLeft: "1rem" }}
+                      >
+                        <Checkbox
+                          style={{ marginRight: "1rem" }}
+                          checked={selectedProject[index] || false}
+                          onChange={() => toggleProjectExperience(index)}
+                        ></Checkbox>
+                      </td>
                       <td
                         scope="row"
                         style={{ backgroundColor: "lightGrey" }}
@@ -382,8 +422,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                           onMouseEnter={() => setHoveredEditItem(true)}
                           onMouseLeave={() => setHoveredEditItem(false)}
                         >
+                          {exp.projectDetails && exp.projectDetails.length > 0 ?  
                           <div style={{ width: "98%" }}>
-                            {exp.projectDetails.map((expDetail, index) => (
+                            {exp.projectDetails?.map((expDetail, index) => (
                               <div key={index}>
                                 <span style={{ fontWeight: "bold" }}>
                                   {expDetail.key}:
@@ -392,6 +433,8 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                               </div>
                             ))}
                           </div>
+                            : <div style={{ width: "98%", height: "2rem" }}></div>
+                          }
                           <div
                             style={{
                               width: "2%",
@@ -431,7 +474,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                               key={index}
                               name={index}
                               autoResize="false"
-                              value={exp.description}
+                              value={exp.description ? exp.description : ''}
                               onChange={(e) =>
                                 handleChange(
                                   e.target.value,
@@ -493,6 +536,14 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                 </tbody>
               </table>
             </div>
+
+            <div
+              style={{
+                marginTop: "1rem",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
             <div style={{ marginTop: "1rem" }}>
               <Button
                 label="Save"
@@ -502,6 +553,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                   borderRadius: "5px",
                   borderColor: "#c2257c",
                   color: "#c2257c",
+                  marginRight: "1rem",
                 }}
                 onClick={handleSave}
               />
@@ -518,10 +570,38 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                 onClick={handleReset}
               />
             </div>
+              <div>
+                <Button
+                  label="Add Project"
+                  outlined
+                  style={{
+                    width: "200px",
+                    borderRadius: "5px",
+                    borderColor: "#4ade80",
+                    background: "#4ade80",
+                    color: "white",
+                    marginRight: "1rem",
+                  }}
+                  onClick={handleAddNewProjects}
+                />
+                <Button
+                  disabled={selectedProject.length === 0}
+                  label="Delete Selected"
+                  style={{
+                    width: "180px",
+                    borderRadius: "5px",
+                    borderColor: "#f55442",
+                    background: "#f55442",
+                    color: "white",
+                  }}
+                  onClick={handleDeleteSelectedProject}
+                />
+              </div>
+            </div>
           </div>
         </Dialog>
         <Dialog
-          header="Responsibility"
+          header="Responsibilities"
           visible={dialogVisible}
           style={{ width: "60vw", height: "80vh" }}
           onHide={() => {
@@ -640,7 +720,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
         </Dialog>
         <Dialog
           draggable={false}
-          header={headerElement}
+          header="Project Details"
           visible={editDialogVisible}
           style={{ width: "60vw", height: "80vh" }}
           onHide={() => {
