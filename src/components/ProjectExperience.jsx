@@ -19,7 +19,8 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const [projectResponsibility, setProjectResponsibility] = useState([]);
   const [selectedResponsibility, setSelectedResponsibility] = useState([]);
   const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
-  const [selectedProjectDetailIndex, setSelectedProjectDetailIndex] = useState(null);
+  const [selectedProjectDetailIndex, setSelectedProjectDetailIndex] =
+    useState(null);
   const [savedProjectExperience, setSavedProjectExperience] = useState(
     projects.map((p) => ({
       ...p,
@@ -30,7 +31,6 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const [selectedProjectDetails, setSelectedProjectDetails] = useState([]);
   const projectDetailsListRef = useRef(null);
 
-
   const handleEditClick = () => {
     setVisible(true);
   };
@@ -39,17 +39,21 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
     setSelectedProjectDetails([]);
     setSelectedProjectIndex(index);
     setSelectedProjectDetailIndex(index);
-    setProjectDetails(Array.isArray(projectExperience[index]?.projectDetails)
-    ? [...projectExperience[index].projectDetails]
-    : []);
+    setProjectDetails(
+      Array.isArray(projectExperience[index]?.projectDetails)
+        ? [...projectExperience[index].projectDetails]
+        : []
+    );
     setEditDialogVisible(true);
   };
 
   const handleDialogEditClick = (index) => {
     setSelectedProjectIndex(index);
-    setProjectResponsibility(Array.isArray(projectExperience[index]?.responsibilities)
-    ? [...projectExperience[index].responsibilities]
-    : []);
+    setProjectResponsibility(
+      Array.isArray(projectExperience[index]?.responsibilities)
+        ? [...projectExperience[index].responsibilities]
+        : []
+    );
     setDialogVisible(true);
   };
 
@@ -61,13 +65,14 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
     setProjectExperience(reset);
   };
 
-  const handleProjectDetailsReset =() => {
-    const projectDetails =
-      Array.isArray(projectExperience[selectedProjectIndex]?.projectDetails)
-        ? projectExperience[selectedProjectIndex].projectDetails
-        : [];
+  const handleProjectDetailsReset = () => {
+    const projectDetails = Array.isArray(
+      projectExperience[selectedProjectIndex]?.projectDetails
+    )
+      ? projectExperience[selectedProjectIndex].projectDetails
+      : [];
     setProjectDetails([...projectDetails]);
-  }
+  };
 
   const handleSave = () => {
     const updatedProjects = projectExperience.map((p) => ({
@@ -92,7 +97,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
     const updatedExperience = [...projectDetails];
     updatedExperience[index] = { ...updatedExperience[index], [field]: value };
     setProjectDetails(updatedExperience);
-  }
+  };
 
   const onResponsibilityChanges = (e) => {
     const index = parseInt(e.target.name, 10);
@@ -109,9 +114,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
 
   const toggleProjectDetails = (index) => {
     const updatedSelections = [...selectedProjectDetails];
-    updatedSelections[index]= !updatedSelections[index];
+    updatedSelections[index] = !updatedSelections[index];
     setSelectedProjectDetails(updatedSelections);
-  }
+  };
 
   const handleResponsibilitiesDialogSave = () => {
     const filteredExperience = projectResponsibility?.filter(
@@ -129,10 +134,11 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   };
 
   const handleDialogReset = () => {
-    const responsibilities =
-      Array.isArray(projectExperience[selectedProjectIndex]?.responsibilities)
-        ? projectExperience[selectedProjectIndex].responsibilities
-        : [];
+    const responsibilities = Array.isArray(
+      projectExperience[selectedProjectIndex]?.responsibilities
+    )
+      ? projectExperience[selectedProjectIndex].responsibilities
+      : [];
     setProjectResponsibility([...responsibilities]);
   };
 
@@ -157,9 +163,10 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
     setSelectedResponsibility(newSelections);
   };
 
-  const handleSaveProjectDetails =()=>{
+  const handleSaveProjectDetails = () => {
     const filteredProjectDetails = projectDetails?.filter(
-      (exp) => exp.key?.toString().trim() !== "" || exp.value?.toString().trim() !== ""
+      (exp) =>
+        exp.key?.toString().trim() !== "" || exp.value?.toString().trim() !== ""
     );
     const updatedProjectExperience = projectExperience.map((project, index) => {
       if (index === selectedProjectIndex) {
@@ -170,24 +177,24 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
       }
       return project;
     });
-    
+
     setProjectExperience(updatedProjectExperience);
     setSelectedProjectDetails([]);
     projectEmitter(updatedProjectExperience);
     setEditDialogVisible(false);
   };
 
-  const handleAddProjectDetails =()=>{
+  const handleAddProjectDetails = () => {
     setProjectDetails([...projectDetails, ""]);
     setTimeout(() => {
       if (projectDetailsListRef.current) {
         projectDetailsListRef.current.scrollTop =
-        projectDetailsListRef.current.scrollHeight;
+          projectDetailsListRef.current.scrollHeight;
       }
     }, 0);
-  }
+  };
 
-  const handleDeleteSelectedProjectDetails =()=>{
+  const handleDeleteSelectedProjectDetails = () => {
     const updatedProjectDetails = projectDetails.filter(
       (_, index) => !selectedProjectDetails[index]
     );
@@ -196,15 +203,15 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
       if (index === selectedProjectDetailIndex) {
         return {
           ...project,
-          projectDetails: updatedProjectDetails
+          projectDetails: updatedProjectDetails,
         };
       }
       return project;
-    });    
+    });
     setSelectedProjectDetails([]);
     setProjectDetails(updatedProjectDetails);
     setProjectExperience(updatedProjectExperience);
-  }
+  };
 
   const headerElement = (
     <SeeOriginal
@@ -263,37 +270,45 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                       >
                         {exp.projectDetails.map((expDetail, index) => (
                           <div key={index}>
-                            <span style={{ fontWeight: "bold" }}>{expDetail.key}:</span>{expDetail.value}
+                            <span style={{ fontWeight: "bold" }}>
+                              {expDetail.key}:{" "}
+                            </span>
+                            {expDetail.value}
                           </div>
-                        ))
-                        }
+                        ))}
                       </td>
                       <td>
                         <div>
-                          {exp.description && 
-                          <div>
-                          <div style={{ fontWeight: "bold" }}>Description:</div>
-                          <div
-                            style={{
-                              marginBottom: "1rem",
-                              paddingLeft: "1rem",
-                              paddingRight: "1rem",
-                              textAlign: "justify",
-                            }}
-                          >
-                            {exp.description}
-                          </div>
-                          </div>}
-                          { exp.responsibilities && exp.responsibilities.length !==0 && <div>
-                          <div style={{ fontWeight: "bold" }}>
-                            Responsibilities:
-                          </div>
-                          <ul>
-                            {exp.responsibilities?.map((skill, index) => (
-                              <li key={index}>{skill}</li>
-                            ))}
-                          </ul>
-                          </div>}
+                          {exp.description && (
+                            <div>
+                              <div style={{ fontWeight: "bold" }}>
+                                Description:
+                              </div>
+                              <div
+                                style={{
+                                  marginBottom: "1rem",
+                                  paddingLeft: "1rem",
+                                  paddingRight: "1rem",
+                                  textAlign: "justify",
+                                }}
+                              >
+                                {exp.description}
+                              </div>
+                            </div>
+                          )}
+                          {exp.responsibilities &&
+                            exp.responsibilities.length !== 0 && (
+                              <div>
+                                <div style={{ fontWeight: "bold" }}>
+                                  Responsibilities:
+                                </div>
+                                <ul>
+                                  {exp.responsibilities?.map((skill, index) => (
+                                    <li key={index}>{skill}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
                         </div>
                       </td>
                     </tr>
@@ -370,10 +385,12 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                           <div style={{ width: "98%" }}>
                             {exp.projectDetails.map((expDetail, index) => (
                               <div key={index}>
-                                <span style={{ fontWeight: "bold" }}>{expDetail.key}:</span> {expDetail.value}
+                                <span style={{ fontWeight: "bold" }}>
+                                  {expDetail.key}:
+                                </span>{" "}
+                                {expDetail.value}
                               </div>
-                            ))
-                            }
+                            ))}
                           </div>
                           <div
                             style={{
@@ -385,7 +402,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                             {hoveredEditItem && (
                               <i
                                 className="pi pi-pencil"
-                                onClick={() => handleBasicDetailsEditClick(index)}
+                                onClick={() =>
+                                  handleBasicDetailsEditClick(index)
+                                }
                                 style={{
                                   fontSize: "1.1rem",
                                   color: "gray",
@@ -641,7 +660,8 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
               height: "99%",
             }}
           >
-            <div style={{ width: "98%", height: "650px", overflowY: "auto" }}
+            <div
+              style={{ width: "98%", height: "650px", overflowY: "auto" }}
               ref={projectDetailsListRef}
             >
               <table
@@ -673,7 +693,11 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                             style={{ width: "100%" }}
                             value={exp.key}
                             onChange={(e) =>
-                              handleProjectDetailsChange(index, "key", e.target.value)
+                              handleProjectDetailsChange(
+                                index,
+                                "key",
+                                e.target.value
+                              )
                             }
                           />
                         </span>
@@ -691,7 +715,11 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                           autoResize="false"
                           value={exp.value}
                           onChange={(e) =>
-                            handleProjectDetailsChange(index, "value", e.target.value)
+                            handleProjectDetailsChange(
+                              index,
+                              "value",
+                              e.target.value
+                            )
                           }
                           style={{
                             resize: "none",
