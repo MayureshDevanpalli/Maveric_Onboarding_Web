@@ -9,23 +9,40 @@ import SeeOriginal from "./SeeOriginal";
 
 const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const [hoveredItem, setHoveredItem] = useState(false);
+  const [hoveredEditItem, setHoveredEditItem] = useState(false);
   const [hoveredDialogItem, setHoveredDialogItem] = useState(false);
   const [visible, setVisible] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
+  const [editDialogVisible, setEditDialogVisible] = useState(false);
   const [projectExperience, setProjectExperience] = useState(projects);
   const projectExperienceListRef = useRef(null);
   const [projectResponsibility, setProjectResponsibility] = useState([]);
   const [selectedResponsibility, setSelectedResponsibility] = useState([]);
-  const [selectedProjectIndex, setSelectedProjectIndex] = useState([]);
+  const [selectedProjectIndex, setSelectedProjectIndex] = useState(null);
+  const [selectedProjectDetailIndex, setSelectedProjectDetailIndex] = useState(null);
   const [savedProjectExperience, setSavedProjectExperience] = useState(
     projects.map((p) => ({
       ...p,
       responsibilities: [...(p.responsibilities || [])],
     }))
   );
+  const [projectDetails, setProjectDetails] = useState([]);
+  const [selectedProjectDetails, setSelectedProjectDetails] = useState([]);
+  const projectDetailsListRef = useRef(null);
+
 
   const handleEditClick = () => {
     setVisible(true);
+  };
+
+  const handleBasicDetailsEditClick = (index) => {
+    setSelectedProjectDetails([]);
+    setSelectedProjectIndex(index);
+    setSelectedProjectDetailIndex(index);
+    setProjectDetails(Array.isArray(projectExperience[index]?.projectDetails)
+    ? [...projectExperience[index].projectDetails]
+    : []);
+    setEditDialogVisible(true);
   };
 
   const handleDialogEditClick = (index) => {
@@ -44,6 +61,14 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
     setProjectExperience(reset);
   };
 
+  const handleProjectDetailsReset =() => {
+    const projectDetails =
+      Array.isArray(projectExperience[selectedProjectIndex]?.projectDetails)
+        ? projectExperience[selectedProjectIndex].projectDetails
+        : [];
+    setProjectDetails([...projectDetails]);
+  }
+
   const handleSave = () => {
     const updatedProjects = projectExperience.map((p) => ({
       ...p,
@@ -52,7 +77,6 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
         : [],
     }));
     setSavedProjectExperience(updatedProjects);
-
     setProjectExperience(projectExperience);
     projectEmitter(projectExperience);
     setVisible(false);
@@ -63,6 +87,12 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
     updated[index][field] = value;
     setProjectExperience(updated);
   };
+
+  const handleProjectDetailsChange = (index, field, value) => {
+    const updatedExperience = [...projectDetails];
+    updatedExperience[index] = { ...updatedExperience[index], [field]: value };
+    setProjectDetails(updatedExperience);
+  }
 
   const onResponsibilityChanges = (e) => {
     const index = parseInt(e.target.name, 10);
@@ -77,7 +107,13 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
     setSelectedResponsibility(updatedSelections);
   };
 
-  const handleDialogSave = () => {
+  const toggleProjectDetails = (index) => {
+    const updatedSelections = [...selectedProjectDetails];
+    updatedSelections[index]= !updatedSelections[index];
+    setSelectedProjectDetails(updatedSelections);
+  }
+
+  const handleResponsibilitiesDialogSave = () => {
     const filteredExperience = projectResponsibility?.filter(
       (exp) => exp.trim() !== ""
     );
@@ -120,6 +156,55 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
     setProjectResponsibility(newResponsibilities);
     setSelectedResponsibility(newSelections);
   };
+
+  const handleSaveProjectDetails =()=>{
+    const filteredProjectDetails = projectDetails?.filter(
+      (exp) => exp.key?.toString().trim() !== "" || exp.value?.toString().trim() !== ""
+    );
+    const updatedProjectExperience = projectExperience.map((project, index) => {
+      if (index === selectedProjectIndex) {
+        return {
+          ...project,
+          projectDetails: filteredProjectDetails,
+        };
+      }
+      return project;
+    });
+    
+    setProjectExperience(updatedProjectExperience);
+    setSelectedProjectDetails([]);
+    projectEmitter(updatedProjectExperience);
+    setEditDialogVisible(false);
+  };
+
+  const handleAddProjectDetails =()=>{
+    setProjectDetails([...projectDetails, ""]);
+    setTimeout(() => {
+      if (projectDetailsListRef.current) {
+        projectDetailsListRef.current.scrollTop =
+        projectDetailsListRef.current.scrollHeight;
+      }
+    }, 0);
+  }
+
+  const handleDeleteSelectedProjectDetails =()=>{
+    const updatedProjectDetails = projectDetails.filter(
+      (_, index) => !selectedProjectDetails[index]
+    );
+
+    const updatedProjectExperience = projectExperience.map((project, index) => {
+      if (index === selectedProjectDetailIndex) {
+        return {
+          ...project,
+          projectDetails: updatedProjectDetails
+        };
+      }
+      return project;
+    });    
+    setSelectedProjectDetails([]);
+    setProjectDetails(updatedProjectDetails);
+    setProjectExperience(updatedProjectExperience);
+  }
 
   const headerElement = (
     <SeeOriginal
@@ -176,26 +261,12 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                         style={{ backgroundColor: "lightGrey" }}
                         width="30%"
                       >
-                        <div>
-                          {exp.client && <div>
-                            <span style={{ fontWeight: "bold" }}>Client:</span> {exp.client}
-                          </div>}
-                          {exp.project && <div>
-                            <span style={{ fontWeight: "bold" }}>Project:</span> {exp.project}
-                          </div>}
-                          {exp.location && <div>
-                            <span style={{ fontWeight: "bold" }}>Location:</span> {exp.location}
-                          </div>}
-                          {exp.role && <div>
-                            <span style={{ fontWeight: "bold" }}>Role:</span> {exp.role}
-                          </div>}
-                          {exp.duration && <div>
-                            <span style={{ fontWeight: "bold" }}>Duration:</span> {exp.duration}
-                          </div>}
-                          {exp.tools && exp.tools !== undefined && <div>
-                            <span style={{ fontWeight: "bold" }}>Tools:</span> {exp.tools?.join(", ")}
-                          </div>}
-                        </div>
+                        {exp.projectDetails.map((expDetail, index) => (
+                          <div key={index}>
+                            <span style={{ fontWeight: "bold" }}>{expDetail.key}:</span>{expDetail.value}
+                          </div>
+                        ))
+                        }
                       </td>
                       <td>
                         <div>
@@ -286,146 +357,45 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                         style={{ backgroundColor: "lightGrey" }}
                         width="35%"
                       >
-                        <table width={"100%"}>
-                          <tbody>
-                            <tr>
-                              <td>
-                                <span style={{ fontWeight: "bold" }}>
-                                  Client:
-                                </span>
-                              </td>
-                              <td>
-                                <InputText
-                                  value={exp.client}
-                                  onChange={(e) =>
-                                    handleChange(
-                                      e.target.value,
-                                      "client",
-                                      index
-                                    )
-                                  }
-                                  style={{
-                                    height: 30,
-                                    width: "100%",
-                                    borderRadius: 0,
-                                  }}
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <span style={{ fontWeight: "bold" }}>
-                                  Project:
-                                </span>
-                              </td>
-                              <td>
-                                <InputText
-                                  value={exp.project}
-                                  onChange={(e) =>
-                                    handleChange(
-                                      e.target.value,
-                                      "project",
-                                      index
-                                    )
-                                  }
-                                  style={{
-                                    height: 30,
-                                    width: "100%",
-                                    borderRadius: 0,
-                                  }}
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <span style={{ fontWeight: "bold" }}>
-                                  Location:
-                                </span>
-                              </td>
-                              <td>
-                                <InputText
-                                  value={exp.location}
-                                  onChange={(e) =>
-                                    handleChange(
-                                      e.target.value,
-                                      "location",
-                                      index
-                                    )
-                                  }
-                                  style={{
-                                    height: 30,
-                                    width: "100%",
-                                    borderRadius: 0,
-                                  }}
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <span style={{ fontWeight: "bold" }}>
-                                  Role:
-                                </span>{" "}
-                              </td>
-                              <td>
-                                <InputText
-                                  value={exp.role}
-                                  onChange={(e) =>
-                                    handleChange(e.target.value, "role", index)
-                                  }
-                                  style={{
-                                    height: 30,
-                                    width: "100%",
-                                    borderRadius: 0,
-                                  }}
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <span style={{ fontWeight: "bold" }}>
-                                  Duration:
-                                </span>
-                              </td>
-                              <td>
-                                <InputText
-                                  value={exp.duration}
-                                  onChange={(e) =>
-                                    handleChange(
-                                      e.target.value,
-                                      "duration",
-                                      index
-                                    )
-                                  }
-                                  style={{
-                                    height: 30,
-                                    width: "100%",
-                                    borderRadius: 0,
-                                  }}
-                                />
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <span style={{ fontWeight: "bold" }}>
-                                  Tools:
-                                </span>
-                              </td>
-                              <td>
-                                <InputText
-                                  value={exp.tools}
-                                  onChange={(e) =>
-                                    handleChange(e.target.value, "tools", index)
-                                  }
-                                  style={{
-                                    height: 30,
-                                    width: "100%",
-                                    borderRadius: 0,
-                                  }}
-                                />
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "flex-start",
+                            width: "100%",
+                          }}
+                          onMouseEnter={() => setHoveredEditItem(true)}
+                          onMouseLeave={() => setHoveredEditItem(false)}
+                        >
+                          <div style={{ width: "98%" }}>
+                            {exp.projectDetails.map((expDetail, index) => (
+                              <div key={index}>
+                                <span style={{ fontWeight: "bold" }}>{expDetail.key}:</span> {expDetail.value}
+                              </div>
+                            ))
+                            }
+                          </div>
+                          <div
+                            style={{
+                              width: "2%",
+                              display: "flex",
+                              justifyContent: "flex-end",
+                            }}
+                          >
+                            {hoveredEditItem && (
+                              <i
+                                className="pi pi-pencil"
+                                onClick={() => handleBasicDetailsEditClick(index)}
+                                style={{
+                                  fontSize: "1.1rem",
+                                  color: "gray",
+                                  cursor: "pointer",
+                                  alignSelf: "flex-start",
+                                }}
+                              ></i>
+                            )}
+                          </div>
+                        </div>
                       </td>
                       <td>
                         <div>
@@ -531,12 +501,11 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
             </div>
           </div>
         </Dialog>
-
         <Dialog
           header="Responsibility"
           visible={dialogVisible}
           style={{ width: "60vw", height: "80vh" }}
-          onHide={() => {            
+          onHide={() => {
             if (!dialogVisible) return;
             handleDialogReset();
             setDialogVisible(false);
@@ -605,7 +574,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                     color: "#c2257c",
                     marginRight: "1rem",
                   }}
-                  onClick={handleDialogSave}
+                  onClick={handleResponsibilitiesDialogSave}
                 />
                 <Button
                   label="Reset"
@@ -645,6 +614,156 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                     color: "white",
                   }}
                   onClick={handleDeleteSelected}
+                />
+              </div>
+            </div>
+          </div>
+        </Dialog>
+        <Dialog
+          draggable={false}
+          header={headerElement}
+          visible={editDialogVisible}
+          style={{ width: "60vw", height: "80vh" }}
+          onHide={() => {
+            if (!editDialogVisible) return;
+            handleProjectDetailsReset;
+            setEditDialogVisible(false);
+          }}
+        >
+          <div
+            style={{
+              padding: "1rem",
+              paddingTop: "0",
+              marginTop: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              height: "99%",
+            }}
+          >
+            <div style={{ width: "98%", height: "650px", overflowY: "auto" }}
+              ref={projectDetailsListRef}
+            >
+              <table
+                className="table table-bordered"
+                style={{ borderColor: "black" }}
+              >
+                <tbody>
+                  {projectDetails.map((exp, index) => (
+                    <tr key={index}>
+                      <td
+                        width="5%"
+                        style={{ paddingTop: "1rem", paddingLeft: "1rem" }}
+                      >
+                        <Checkbox
+                          style={{ marginRight: "1rem" }}
+                          checked={selectedProjectDetails[index] || false}
+                          onChange={() => toggleProjectDetails(index)}
+                        ></Checkbox>
+                      </td>
+                      <td
+                        scope="row"
+                        style={{
+                          backgroundColor: "lightGrey",
+                        }}
+                        width="30%"
+                      >
+                        <span style={{ fontWeight: "bold" }}>
+                          <InputText
+                            style={{ width: "100%" }}
+                            value={exp.key}
+                            onChange={(e) =>
+                              handleProjectDetailsChange(index, "key", e.target.value)
+                            }
+                          />
+                        </span>
+                      </td>
+                      <td
+                        style={{
+                          display: "flex",
+                          borderLeft: "none",
+                          padding: "10px",
+                        }}
+                      >
+                        <InputTextarea
+                          key={index}
+                          name={index}
+                          autoResize="false"
+                          value={exp.value}
+                          onChange={(e) =>
+                            handleProjectDetailsChange(index, "value", e.target.value)
+                          }
+                          style={{
+                            resize: "none",
+                            padding: 0,
+                            border: "none",
+                            borderRadius: 0,
+                            width: "100%",
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div
+              style={{
+                marginTop: "1rem",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <div>
+                <Button
+                  label="Save"
+                  outlined
+                  style={{
+                    width: "122px",
+                    borderRadius: "5px",
+                    borderColor: "#c2257c",
+                    color: "#c2257c",
+                  }}
+                  onClick={handleSaveProjectDetails}
+                />
+                <Button
+                  label="Reset"
+                  outlined
+                  style={{
+                    width: "122px",
+                    borderRadius: "5px",
+                    borderColor: "#1a4879",
+                    color: "#1a4879",
+                    marginLeft: "1rem",
+                  }}
+                  onClick={handleProjectDetailsReset}
+                />
+              </div>
+              <div>
+                <Button
+                  label="Add Credits"
+                  outlined
+                  style={{
+                    width: "200px",
+                    borderRadius: "5px",
+                    borderColor: "#4ade80",
+                    background: "#4ade80",
+                    color: "white",
+                    marginRight: "1rem",
+                  }}
+                  onClick={handleAddProjectDetails}
+                />
+                <Button
+                  disabled={selectedProjectDetails.length === 0}
+                  label="Delete Selected"
+                  style={{
+                    width: "180px",
+                    borderRadius: "5px",
+                    borderColor: "#f55442",
+                    background: "#f55442",
+                    color: "white",
+                  }}
+                  onClick={handleDeleteSelectedProjectDetails}
                 />
               </div>
             </div>

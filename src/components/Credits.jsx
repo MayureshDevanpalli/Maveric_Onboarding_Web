@@ -19,9 +19,7 @@ const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
         ? credit.items.join(", ")
         : credit.items,
     }));
-  const [initialCredits, setInitialCredits] = useState(() =>
-    normalizeCredits(creditMap)
-  );
+  const [initialCredits, setInitialCredits] = useState(() => normalizeCredits(creditMap));
   const [credits, setCredits] = useState(() => normalizeCredits(creditMap));
 
   const handleEditClick = () => {
@@ -186,6 +184,7 @@ const Credits = ({ creditMap, creditEmitter, originalCredits }) => {
           style={{ width: "60vw", height: "80vh" }}
           onHide={() => {
             if (!visible) return;
+            handleReset();
             setVisible(false);
           }}
         >
