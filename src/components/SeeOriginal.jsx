@@ -56,7 +56,7 @@ const SeeOriginal = ({ data, title, width }) => {
 
   const ProjectsExperience =
     data && data.length > 0 ? (
-      <div style={{ height: "70vh", overflowY: "auto" }}>
+      <div style={{overflowY: "auto" }}>
         <table
           className="table table-bordered"
           style={{ borderColor: "black", fontSize: "13px" }}
@@ -65,7 +65,16 @@ const SeeOriginal = ({ data, title, width }) => {
             {(Array.isArray(data) ? data : []).map((exp, index) => (
               <tr key={index}>
                 <td scope="row" style={{ backgroundColor: "#ebeae8" }}>
-                  <div>
+
+                {exp.projectDetails?.map((expDetail, index) => (
+                          <div key={index}>
+                            <span style={{ fontWeight: "bold" }}>
+                              {expDetail.key}:{" "}
+                            </span>
+                            {expDetail.value}
+                          </div>
+                        ))}
+                  {/* <div>
                     <div>
                       <span style={{ fontWeight: "bold" }}>Client:</span>{" "}
                       {exp.client}
@@ -90,7 +99,7 @@ const SeeOriginal = ({ data, title, width }) => {
                       <span style={{ fontWeight: "bold" }}>Tools:</span>{" "}
                       {exp.tools?.join(", ")}
                     </div>
-                  </div>
+                  </div> */}
                 </td>
                 <td style={{ backgroundColor: "#ebeae8" }}>
                   <div>
