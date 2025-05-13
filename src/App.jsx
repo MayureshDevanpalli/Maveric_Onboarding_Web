@@ -83,7 +83,6 @@ function App() {
       }),
     ])
       .then(async ([res1, res2]) => {
-        console.log("then called");
         fileUploadRef.current.clear();
 
         // Handle first response

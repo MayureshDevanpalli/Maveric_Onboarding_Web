@@ -65,11 +65,18 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
       responsibilities: [...p.responsibilities],
     }));
     setProjectExperience(reset);
+    setSelectedProject([]);
   };
 
 
   const handleAddNewProjects = () => {
-    setProjectExperience([...projects, ""]);
+    const newProject = {
+      projectDetails: [],
+      description: "",
+      responsibilities: []
+    };
+  
+    setProjectExperience((prev) => [...prev, newProject]);
     setTimeout(() => {
       if (projectExperienceRef.current) {
         projectExperienceRef.current.scrollTop =
@@ -100,25 +107,33 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
       ? projectExperience[selectedProjectIndex].projectDetails
       : [];
     setProjectDetails([...projectDetails]);
+    setSelectedProjectDetails([]);
   };
 
   const handleSave = () => {
-    const updatedProjects = projectExperience.map((p) => ({
-      ...p,
-      responsibilities: Array.isArray(p.responsibilities)
-        ? [...p.responsibilities]
-        : [],
-    }));
+    const updatedProjects = projectExperience
+      .filter(
+        (exp) => exp.description?.toString().trim() !== "" ||
+          (Array.isArray(exp.projectDetails) && exp.projectDetails.length > 0) ||
+          (Array.isArray(exp.responsibilities) && exp.responsibilities.length > 0)
+      )
+      .map((p) => ({
+        ...p,
+        description: p.description?.toString().trim() || "",
+        projectDetails: Array.isArray(p.projectDetails) ? [...p.projectDetails] : [],
+        responsibilities: Array.isArray(p.responsibilities) ? [...p.responsibilities] : [],
+      }));
     setSavedProjectExperience(updatedProjects);
-    setProjectExperience(projectExperience);
-    projectEmitter(projectExperience);
+    setProjectExperience(updatedProjects);
+    setSelectedProject([]);
+    projectEmitter(updatedProjects);
     setVisible(false);
   };
 
   const handleChange = (value, field, index) => {
-    const updated = [...projectExperience];
-    updated[index][field] = value;
-    setProjectExperience(updated);
+    const updatedExperience = [...projectExperience];
+    updatedExperience[index] = { ...updatedExperience[index], [field]: value };
+    setProjectExperience(updatedExperience);
   };
 
   const handleProjectDetailsChange = (index, field, value) => {
@@ -157,6 +172,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
       responsibilities: filteredExperience,
     };
     setProjectExperience(updatedProjectExperience);
+    setSelectedResponsibility([]);
     projectEmitter(updatedProjectExperience);
     setDialogVisible(false);
   };
@@ -168,6 +184,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
       ? projectExperience[selectedProjectIndex].responsibilities
       : [];
     setProjectResponsibility([...responsibilities]);
+    setSelectedResponsibility([]);
   };
 
   const handleAddProjectResponsibility = () => {
@@ -194,8 +211,10 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   const handleSaveProjectDetails = () => {
     const filteredProjectDetails = projectDetails?.filter(
       (exp) =>
-        exp.key?.toString().trim() !== "" || exp.value?.toString().trim() !== ""
+        typeof exp === 'object' &&
+      (exp.key?.toString().trim() !== '' || exp.value?.toString().trim() !== '')
     );
+    
     const updatedProjectExperience = projectExperience.map((project, index) => {
       if (index === selectedProjectIndex) {
         return {
@@ -240,6 +259,10 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
     setProjectDetails(updatedProjectDetails);
     setProjectExperience(updatedProjectExperience);
   };
+
+  const capitaliseInitial = (str) =>{
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   const headerElement = (
     <SeeOriginal
@@ -299,9 +322,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                         {exp.projectDetails?.map((expDetail, index) => (
                           <div key={index}>
                             <span style={{ fontWeight: "bold" }}>
-                              {expDetail.key}:{" "}
+                            {capitaliseInitial(expDetail.key)}:{" "}
                             </span>
-                            {expDetail.value}
+                            {capitaliseInitial(expDetail.value)}
                           </div>
                         ))}
                       </td>
@@ -427,9 +450,9 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                             {exp.projectDetails?.map((expDetail, index) => (
                               <div key={index}>
                                 <span style={{ fontWeight: "bold" }}>
-                                  {expDetail.key}:
+                                  {capitaliseInitial(expDetail.key)}:
                                 </span>{" "}
-                                {expDetail.value}
+                                {capitaliseInitial(expDetail.value)}
                               </div>
                             ))}
                           </div>
@@ -474,14 +497,8 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
                               key={index}
                               name={index}
                               autoResize="false"
-                              value={exp.description ? exp.description : ''}
-                              onChange={(e) =>
-                                handleChange(
-                                  e.target.value,
-                                  "description",
-                                  index
-                                )
-                              }
+                              value={exp.description}
+                              onChange={(e) => handleChange(e.target.value, "description", index)}
                               style={{
                                 resize: "none",
                                 padding: 0,
@@ -849,7 +866,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
               </div>
               <div>
                 <Button
-                  label="Add Credits"
+                  label="Add Project Details"
                   outlined
                   style={{
                     width: "200px",
