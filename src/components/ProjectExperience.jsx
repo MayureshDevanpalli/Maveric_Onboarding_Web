@@ -261,6 +261,7 @@ const ProjectExperience = ({ projects, projectEmitter, originalProjects }) => {
   };
 
   const capitaliseInitial = (str) =>{
+    str = String(str || '');
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
