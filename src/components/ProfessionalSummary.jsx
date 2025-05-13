@@ -96,6 +96,7 @@ const ProfessionalSummary = ({ summary, summaryEmitter, originalSummary }) => {
           style={{ width: "50vw" }}
           onHide={() => {
             if (!visible) return;
+            handleReset();
             setVisible(false);
           }}
         >
